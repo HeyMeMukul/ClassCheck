@@ -32,7 +32,7 @@ npm run dev
 2. Click on any date to mark attendance for classes
 3. View smart suggestions based on your attendance patterns
 4. Check reports and analytics for detailed insights
-5. Upload your timetable and calendar files for automated scheduling
+
 
 ## Technologies Used
 
