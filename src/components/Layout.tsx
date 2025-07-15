@@ -7,7 +7,7 @@ const Layout: React.FC = () => {
   const { user } = useLoaderData() as { user: any };
   
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
+    <div className="min-h-screen bg-black dark:bg-gray-900">
       <Header />
       <div className="flex">
         <Sidebar />
