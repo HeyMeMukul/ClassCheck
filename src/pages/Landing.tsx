@@ -212,7 +212,7 @@ const Landing: React.FC = () => {
               <span className="text-lg font-bold">ClassCheck</span>
             </div>
             <div className="text-gray-400 text-sm">
-              © 2024 ClassCheck. All rights reserved.
+              © 2025 ClassCheck. All rights reserved.
             </div>
           </div>
         </div>
