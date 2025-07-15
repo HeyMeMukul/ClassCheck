@@ -35,8 +35,8 @@ const Login: React.FC = () => {
     <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
       {/* Header Row */}
       <div className="absolute top-0 left-0 w-full flex justify-between items-center p-4 z-10">
-        <div className="w-10 h-10 flex items-center justify-center bg-gray-700 rounded-md">
-          <span className="text-white text-lg">📅</span>
+        <div className="w-10 h-10 flex items-center justify-centerrounded-md">
+          <span className="text-white text-lg logo"></span>
         </div>
         <button
           type="button"

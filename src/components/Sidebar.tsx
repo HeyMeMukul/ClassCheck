@@ -95,8 +95,8 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
         {/* Header */}
         <div className="flex items-center justify-between p-4 lg:p-6 border-b border-gray-800 lg:border-b-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 flex items-center justify-center bg-gray-800 rounded-md shadow-inner">
-              <span className="text-lg text-white">📅</span>
+            <div className="w-9 h-9 flex items-center justify-center rounded-md shadow-inner">
+              <span className="text-lg text-white logo"></span>
             </div>
             <h1 className="text-white text-xl font-bold tracking-wide">
               <span>Class</span>
