@@ -32,9 +32,9 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black flex items-center justify-center relative">
+    <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
       {/* Header Row */}
-      <div className="absolute top-0 left-0 w-full flex justify-between items-center p-4">
+      <div className="absolute top-0 left-0 w-full flex justify-between items-center p-4 z-10">
         <div className="w-10 h-10 flex items-center justify-center bg-gray-700 rounded-md">
           <span className="text-white text-lg">📅</span>
         </div>
@@ -51,13 +51,19 @@ const Login: React.FC = () => {
       <div className="flex items-center justify-center w-full max-w-7xl mx-auto px-8">
         {/* Left Side - "Class" */}
         <div className="flex-1 flex justify-end pr-12">
-          <span className="text-white font-bold text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight select-none">
+          <span
+            className="text-white font-bold text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight select-none animate-floating"
+            style={{
+              transform: 'perspective(800px) rotateY(-10deg)',
+              transformStyle: 'preserve-3d',
+            }}
+          >
             Class
           </span>
         </div>
 
         {/* Center - Login/Register Card */}
-        <div className="flex-shrink-0 w-80">
+        <div className="flex-shrink-0 w-80 animate-slideup">
           <div className="bg-gray-800 shadow-2xl rounded-2xl py-6 px-6 flex flex-col items-center">
             <h2 className="text-lg font-normal text-white mb-4 text-center">
               {isRegister ? 'Sign Up' : 'Sign In To Your Account'}
@@ -119,11 +125,39 @@ const Login: React.FC = () => {
 
         {/* Right Side - "Check" */}
         <div className="flex-1 flex justify-start pl-12">
-          <span className="text-white font-bold text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight select-none">
+          <span
+            className="text-white font-bold text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight select-none animate-floating"
+            style={{
+              transform: 'perspective(800px) rotateY(10deg)',
+              transformStyle: 'preserve-3d',
+            }}
+          >
             Check
           </span>
         </div>
       </div>
+
+      {/* Tailwind custom animations */}
+      <style>{`
+        @keyframes floating {
+          0% { transform: translateY(0) rotateY(var(--rotate)); }
+          50% { transform: translateY(-8px) rotateY(var(--rotate)); }
+          100% { transform: translateY(0) rotateY(var(--rotate)); }
+        }
+
+        @keyframes slideup {
+          from { opacity: 0; transform: translateY(60px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-floating {
+          animation: floating 3s ease-in-out infinite;
+        }
+
+        .animate-slideup {
+          animation: slideup 0.8s ease-out;
+        }
+      `}</style>
     </div>
   );
 };
