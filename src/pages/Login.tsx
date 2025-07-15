@@ -1,8 +1,6 @@
-// src/pages/Login.tsx
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Button } from '../components/ui/Button';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -34,101 +32,96 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-      <div className="max-w-md w-full space-y-8">
-        <div className="text-center">
-          <h2 className="mt-6 text-3xl font-extrabold text-gray-900 dark:text-white">
-            {isRegister ? 'Create your account' : 'Sign in to your account'}
-          </h2>
-          <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">
-            {isRegister ? 'Join ClassCheck today' : 'Welcome back to ClassCheck'}
-          </p>
+    <div className="min-h-screen bg-black flex items-center justify-center relative">
+      {/* Header Row */}
+      <div className="absolute top-0 left-0 w-full flex justify-between items-center p-4">
+        <div className="w-10 h-10 flex items-center justify-center bg-gray-700 rounded-md">
+          <span className="text-white text-lg">📅</span>
+        </div>
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className="text-gray-400 hover:text-white text-sm font-medium transition-colors"
+        >
+          Back to Home
+        </button>
+      </div>
+
+      {/* Main Content Container */}
+      <div className="flex items-center justify-center w-full max-w-7xl mx-auto px-8">
+        {/* Left Side - "Class" */}
+        <div className="flex-1 flex justify-end pr-12">
+          <span className="text-white font-bold text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight select-none">
+            Class
+          </span>
         </div>
 
-        <form className="mt-8 space-y-6" onSubmit={handleSubmit}>
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-md">
-              {error}
-            </div>
-          )}
+        {/* Center - Login/Register Card */}
+        <div className="flex-shrink-0 w-80">
+          <div className="bg-gray-800 shadow-2xl rounded-2xl py-6 px-6 flex flex-col items-center">
+            <h2 className="text-lg font-normal text-white mb-4 text-center">
+              {isRegister ? 'Sign Up' : 'Sign In To Your Account'}
+            </h2>
 
-          <div className="space-y-4">
-            {isRegister && (
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                  Full Name
-                </label>
+            <form className="space-y-3 w-full" onSubmit={handleSubmit} autoComplete="off">
+              {error && (
+                <div className="bg-red-100 border border-red-300 text-red-800 rounded-md px-3 py-2 text-sm">{error}</div>
+              )}
+
+              {isRegister && (
                 <input
-                  id="name"
-                  name="name"
                   type="text"
-                  required
+                  placeholder="Full Name"
+                  autoComplete="name"
+                  className="w-full px-3 py-2.5 rounded-md bg-gray-900 border border-gray-600 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-                  placeholder="Enter your full name"
+                  required
                 />
-              </div>
-            )}
-
-            <div>
-              <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Email Address
-              </label>
+              )}
               <input
-                id="email"
-                name="email"
                 type="email"
-                required
+                placeholder="Email Address"
+                autoComplete="email"
+                className="w-full px-3 py-2.5 rounded-md bg-gray-900 border border-gray-600 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-                placeholder="Enter your email"
-              />
-            </div>
-
-            <div>
-              <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                Password
-              </label>
-              <input
-                id="password"
-                name="password"
-                type="password"
                 required
+              />
+              <input
+                type="password"
+                placeholder="Password"
+                autoComplete={isRegister ? "new-password" : "current-password"}
+                className="w-full px-3 py-2.5 rounded-md bg-gray-900 border border-gray-600 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:border-gray-600 dark:text-white"
-                placeholder="Enter your password"
+                required
               />
-            </div>
-          </div>
 
-          <div>
-            <Button
-              type="submit"
-              disabled={loading}
-              className="w-full flex justify-center"
-            >
-              {loading ? 'Please wait...' : (isRegister ? 'Create Account' : 'Sign In')}
-            </Button>
-          </div>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 mt-4 rounded-md bg-white hover:bg-gray-100 transition-colors font-medium text-black shadow text-sm disabled:opacity-50"
+              >
+                {loading ? (isRegister ? 'Creating...' : 'Signing In...') : (isRegister ? 'Sign Up' : 'Sign In')}
+              </button>
+            </form>
 
-          <div className="text-center">
             <button
               type="button"
+              className="mt-4 text-gray-400 hover:text-white font-normal text-xs transition-colors"
               onClick={() => setIsRegister(!isRegister)}
-              className="text-blue-600 hover:text-blue-500 text-sm font-medium"
             >
-              {isRegister ? 'Already have an account? Sign in' : "Don't have an account? Register"}
+              {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
             </button>
           </div>
-        </form>
+        </div>
 
-        <div className="text-center">
-          <Link to="/" className="text-blue-600 hover:text-blue-500 text-sm">
-            ← Back to Home
-          </Link>
+        {/* Right Side - "Check" */}
+        <div className="flex-1 flex justify-start pl-12">
+          <span className="text-white font-bold text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight select-none">
+            Check
+          </span>
         </div>
       </div>
     </div>
