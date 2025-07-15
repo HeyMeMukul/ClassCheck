@@ -17,13 +17,17 @@ const Landing: React.FC = () => {
   return (
     <div className="min-h-screen bg-black text-white overflow-hidden">
       {/* Navigation */}
+      <br></br>
+            <br></br>
+      <br></br>
+
       <nav className="absolute top-0 left-0 w-full z-50 p-6">
         <div className="flex justify-between items-center max-w-7xl mx-auto">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 flex items-center justify-center bg-gray-800 rounded-md">
               <span className="text-white text-lg">📅</span>
             </div>
-            <span className="text-xl font-bold">ClassCheck</span>
+            <span className="text-xl font-bold">Class Check</span>
           </div>
           <div className="hidden md:flex space-x-8">
             <button 
