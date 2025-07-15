@@ -17,6 +17,8 @@ const Settings: React.FC = () => {
     <div className="min-h-screen bg-black text-white">
       <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
         {/* Header */}
+        <div></div>
+        <br></br>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">⚙️ Settings</h1>
           <p className="text-sm text-gray-400">
@@ -54,46 +56,10 @@ const Settings: React.FC = () => {
           </div>
         </div>
 
-        {/* Additional Settings Sections */}
-        <div className="bg-gray-900 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 w-full max-w-4xl mx-auto">
-          <h2 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 border-b border-gray-700 pb-3">
-            🔧 App Preferences
-          </h2>
-          
-          <div className="space-y-4 sm:space-y-6 text-sm sm:text-base">
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-              <div>
-                <label className="block text-gray-300 font-medium">Dark Mode</label>
-                <p className="text-gray-400 text-xs sm:text-sm">Always enabled for better experience</p>
-              </div>
-              <div className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                ON
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-              <div>
-                <label className="block text-gray-300 font-medium">Notifications</label>
-                <p className="text-gray-400 text-xs sm:text-sm">Get reminders about attendance</p>
-              </div>
-              <div className="bg-blue-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                ENABLED
-              </div>
-            </div>
-
-            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-              <div>
-                <label className="block text-gray-300 font-medium">Auto-save</label>
-                <p className="text-gray-400 text-xs sm:text-sm">Automatically save attendance changes</p>
-              </div>
-              <div className="bg-green-600 text-white px-3 py-1 rounded-full text-xs font-medium">
-                ON
-              </div>
+       
             </div>
           </div>
-        </div>
-      </div>
-    </div>
+        
   );
 };
 

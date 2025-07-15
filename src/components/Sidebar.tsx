@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { BarChart3, Home, Settings, Book, X } from 'lucide-react';
-
+import { useAuth } from '../contexts/AuthContext';
+import { useAttendance } from '../contexts/AttendanceContext';
+import { Button } from './ui/Button';
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
   { name: 'Subjects', href: '/subjects', icon: Book },
   { name: 'Reports', href: '/reports', icon: BarChart3 },
   { name: 'Settings', href: '/settings', icon: Settings },
+  { name: 'Logout', href: '#', icon: X, action: 'handleLogout', className: 'text-red-500 hover:bg-red-600 hover:text-white', isActive: false },
 ];
 
 interface SidebarProps {
@@ -15,6 +18,20 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+
+   const { user, logout } = useAuth();
+    const { calculatePercentage } = useAttendance();
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+  
+  const handleLogout = async () => {
+    try {
+      await logout();
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+    const attendancePercentage = calculatePercentage();
   // Close sidebar on window resize to desktop size
   useEffect(() => {
     const handleResize = () => {
@@ -96,33 +113,48 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             <X size={20} />
           </button>
         </div>
-
+          
         {/* Navigation */}
         <nav className="flex flex-col gap-1 flex-1 px-3 lg:px-4 py-4" role="navigation">
           {navigation.map((item) => {
             const Icon = item.icon;
+            if (item.name === 'Logout') {
+              return (
+          <button
+            key={item.name}
+            onClick={async () => {
+              await handleLogout();
+              onClose();
+            }}
+            className="flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 text-sm font-medium group text-red-500 hover:bg-red-600 hover:text-white"
+            type="button"
+          >
+            <Icon className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
+            <span>{item.name}</span>
+          </button>
+              );
+            }
             return (
               <NavLink
-                key={item.name}
-                to={item.href}
-                onClick={onClose} // Close sidebar on mobile when nav item is clicked
-                className={({ isActive }) =>
-                  `flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 text-sm font-medium group ${
-                    isActive
-                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
-                      : 'text-gray-400 hover:bg-gray-800 hover:text-white'
-                  }`
-                }
+          key={item.name}
+          to={item.href}
+          onClick={onClose} // Close sidebar on mobile when nav item is clicked
+          className={({ isActive }) =>
+            `flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 text-sm font-medium group ${
+              isActive
+                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
+                : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+            }`
+          }
               >
-                <Icon className={`w-5 h-5 transition-transform duration-200 ${
-                  'group-hover:scale-110'
-                }`} />
-                <span>{item.name}</span>
+          <Icon className="w-5 h-5 transition-transform duration-200 group-hover:scale-110" />
+          <span>{item.name}</span>
               </NavLink>
             );
           })}
         </nav>
-
+          {/* User Info */}
+                     
         {/* Footer */}
         <div className="p-4 lg:p-6 text-xs text-gray-500 border-t border-gray-800 mt-auto">
           <p className="text-center font-medium">

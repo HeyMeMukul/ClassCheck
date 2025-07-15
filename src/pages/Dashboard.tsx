@@ -12,6 +12,8 @@ const Dashboard: React.FC = () => {
     <div className="min-h-screen bg-black text-white">
       <div className="p-4 sm:p-6 lg:p-8 space-y-6">
         {/* Header */}
+        <div></div>
+        <br></br>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
             Dashboard
