@@ -8,6 +8,8 @@ const Header: React.FC = () => {
   const { user, logout } = useAuth();
   const { calculatePercentage } = useAttendance();
 
+  const attendancePercentage = calculatePercentage();
+
   const handleLogout = async () => {
     try {
       await logout();
@@ -17,52 +19,34 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-gray-900 dark:bg-gray-800 shadow-sm border-b border-gray-700">
-      <div className="px-6 py-4">
-        <div className="flex justify-between items-center">
-          <div className="flex items-center space-x-4">
-            <div className="hidden md:flex items-center space-x-2">
-              <span className="text-sm text-gray-100 dark:text-gray-400">
-                Current Attendance:
-              </span>
-              <span
-                className={`text-sm font-semibold ${
-                  calculatePercentage() >= 75
-                    ? 'text-green-500 dark:text-green-400'
-                    : 'text-red-500 dark:text-red-400'
-                }`}
-              >
-                {calculatePercentage()}%
-              </span>
-            </div>
+    <header className="bg-gray-900 dark:bg-gray-800 shadow-sm border-b border-gray-700 w-full">
+      <div className="px-4 sm:px-6 py-4">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 md:gap-0">
+          {/* Left: Attendance Info */}
+          <div className="flex items-center gap-2 flex-wrap text-sm">
+            <span className="text-gray-100 dark:text-gray-400">
+              Current Attendance:
+            </span>
+            <span
+              className={`font-semibold ${
+                attendancePercentage >= 75
+                  ? 'text-green-500 dark:text-green-400'
+                  : 'text-red-500 dark:text-red-400'
+              }`}
+            >
+              {attendancePercentage}%
+            </span>
           </div>
 
-          <div className="flex items-center space-x-4">
-            <div className="hidden md:block">
-              <span className="text-sm text-gray-100 dark:text-gray-400">
-                Welcome, {user?.name || 'User'}
-              </span>
-            </div>
+          {/* Right: User Info + Logout */}
+          <div className="flex items-center gap-3 flex-wrap text-sm">
+            <span className="text-gray-100 dark:text-gray-400">
+              Welcome, {user?.name || 'User'}
+            </span>
             <Button variant="secondary" onClick={handleLogout}>
               Logout
             </Button>
           </div>
-        </div>
-
-        {/* Mobile attendance display */}
-        <div className="md:hidden mt-2 flex items-center space-x-2">
-          <span className="text-sm text-gray-100 dark:text-gray-400">
-            Current Attendance:
-          </span>
-          <span
-            className={`text-sm font-semibold ${
-              calculatePercentage() >= 75
-                ? 'text-green-500 dark:text-green-400'
-                : 'text-red-500 dark:text-red-400'
-            }`}
-          >
-            {calculatePercentage()}%
-          </span>
         </div>
       </div>
     </header>

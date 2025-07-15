@@ -1,7 +1,13 @@
 // src/pages/Reports.tsx
 import React, { useMemo, useState } from 'react';
 import { useOutletContext } from 'react-router-dom';
-import { endOfMonth, startOfMonth, eachDayOfInterval, format, getDay } from 'date-fns';
+import {
+  endOfMonth,
+  startOfMonth,
+  eachDayOfInterval,
+  format,
+  getDay,
+} from 'date-fns';
 import { useAttendance } from '../contexts/AttendanceContext';
 import { useSchedule } from '../contexts/ScheduleContext';
 
@@ -62,7 +68,9 @@ const Reports: React.FC = () => {
   const exportAsCSV = () => {
     const csvContent = [
       ['Subject', 'Attended', 'Missed', 'Cancelled', 'Total', 'Attendance Rate'].join(','),
-      ...subjectStats.map(stat => [stat.subject, stat.attended, stat.missed, stat.cancelled, stat.total, `${stat.rate}%`].join(','))
+      ...subjectStats.map(stat =>
+        [stat.subject, stat.attended, stat.missed, stat.cancelled, stat.total, `${stat.rate}%`].join(',')
+      )
     ].join('\n');
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -73,13 +81,13 @@ const Reports: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black px-6 py-10 space-y-10 text-white">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold tracking-tight">Attendance Reports</h1>
+    <div className="min-h-screen bg-black px-4 py-6 space-y-8 text-white sm:px-6 md:px-10">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4">
+        <h1 className="text-2xl sm:text-3xl font-bold">Attendance Reports</h1>
         <p className="text-sm text-gray-400">Logged in as: {user?.name || 'User'}</p>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
         <input
           type="month"
           value={format(selectedMonth, 'yyyy-MM')}
@@ -90,7 +98,7 @@ const Reports: React.FC = () => {
       </div>
 
       {!hasSchedule && (
-        <div className="bg-blue-900 p-4 rounded-lg">
+        <div className="bg-blue-900 p-4 rounded-lg text-sm">
           <p className="text-blue-200">
             📚 No subjects added yet.
             <a href="/subjects" className="underline ml-1 font-medium">Add subjects</a> to view attendance reports.
@@ -98,39 +106,43 @@ const Reports: React.FC = () => {
         </div>
       )}
 
-      <div className="bg-gray-900 rounded-2xl shadow-md p-6">
-        <h2 className="text-xl font-semibold mb-4">Monthly Summary</h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <StatCard label="Classes Attended" value={stats.attended} color="green" />
-          <StatCard label="Classes Missed" value={stats.missed} color="red" />
+      <div className="bg-gray-900 rounded-xl shadow-md p-5 space-y-6">
+        <h2 className="text-lg sm:text-xl font-semibold">Monthly Summary</h2>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <StatCard label="Attended" value={stats.attended} color="green" />
+          <StatCard label="Missed" value={stats.missed} color="red" />
           <StatCard label="Cancelled" value={stats.cancelled} color="gray" />
           <StatCard label="Attendance Rate" value={`${stats.attendanceRate}%`} color="blue" />
         </div>
 
-        <div className="mt-8 pt-4 border-t border-gray-700 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-700 text-sm">
           <div>
             <span className="text-gray-400">Total Planned Classes:</span>
             <span className="ml-2 font-semibold">{stats.totalPlanned}</span>
           </div>
           <div>
             <span className="text-gray-400">Classes Recorded:</span>
-            <span className="ml-2 font-semibold">{stats.attended + stats.missed + stats.cancelled}</span>
+            <span className="ml-2 font-semibold">
+              {stats.attended + stats.missed + stats.cancelled}
+            </span>
           </div>
         </div>
       </div>
 
       {hasSchedule && subjectStats.length > 0 && (
-        <div className="bg-gray-900 rounded-2xl shadow-md p-6">
-          <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-semibold">Subject-wise Breakdown</h2>
+        <div className="bg-gray-900 rounded-xl shadow-md p-5 space-y-4">
+          <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+            <h2 className="text-lg sm:text-xl font-semibold">Subject-wise Breakdown</h2>
             <button
               onClick={exportAsCSV}
               className="bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-4 rounded-md text-sm"
-            >Export as CSV</button>
+            >
+              Export CSV
+            </button>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="min-w-full text-sm">
               <thead>
                 <tr className="border-b border-gray-700">
                   <th className="text-left py-2 px-3">Subject</th>
@@ -152,7 +164,10 @@ const Reports: React.FC = () => {
                     <td className="py-2 px-3 text-center">
                       <span className={`font-medium ${
                         stat.rate >= 75 ? 'text-green-400' :
-                        stat.rate >= 50 ? 'text-yellow-400' : 'text-red-400'}`}>{stat.rate}%</span>
+                        stat.rate >= 50 ? 'text-yellow-400' : 'text-red-400'
+                      }`}>
+                        {stat.rate}%
+                      </span>
                     </td>
                   </tr>
                 ))}
@@ -163,21 +178,21 @@ const Reports: React.FC = () => {
       )}
 
       {hasSchedule && (
-        <div className="bg-gray-900 rounded-2xl shadow-md p-6">
-          <h2 className="text-xl font-semibold mb-4">Weekly Schedule Overview</h2>
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+        <div className="bg-gray-900 rounded-xl shadow-md p-5 space-y-4">
+          <h2 className="text-lg sm:text-xl font-semibold">Weekly Schedule Overview</h2>
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4 text-sm">
             {(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] as const).map(day => (
               <div key={day} className="bg-gray-800 p-3 rounded-lg">
                 <h3 className="font-medium text-center mb-2">{day}</h3>
                 <div className="space-y-1">
                   {schedule[day].length > 0 ? (
                     schedule[day].map((subject, index) => (
-                      <div key={index} className="bg-gray-700 px-3 py-1 rounded text-sm text-center">
+                      <div key={index} className="bg-gray-700 px-3 py-1 rounded text-center">
                         {subject}
                       </div>
                     ))
                   ) : (
-                    <p className="text-gray-500 text-sm text-center py-2">No subjects</p>
+                    <p className="text-gray-500 text-center py-2">No subjects</p>
                   )}
                 </div>
               </div>
@@ -196,9 +211,9 @@ interface StatProps {
 }
 
 const StatCard: React.FC<StatProps> = ({ label, value, color }) => (
-  <div className={`bg-${color}-900 p-5 rounded-xl text-center`}>
+  <div className={`bg-${color}-900 p-4 rounded-xl text-center`}>
     <h3 className={`text-${color}-200 font-medium mb-1`}>{label}</h3>
-    <p className={`text-2xl font-bold text-${color}-400`}>{value}</p>
+    <p className={`text-xl font-bold text-${color}-400`}>{value}</p>
   </div>
 );
 
