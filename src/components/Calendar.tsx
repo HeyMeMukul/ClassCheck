@@ -61,20 +61,22 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-900 rounded-2xl p-6 shadow-xl">
+    <div className="bg-gray-900 rounded-2xl p-4 sm:p-6 shadow-xl">
       {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-semibold text-white">{format(currentMonth, 'MMMM yyyy')}</h2>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
+        <h2 className="text-xl sm:text-2xl font-semibold text-white">
+          {format(currentMonth, 'MMMM yyyy')}
+        </h2>
         <div className="flex gap-2">
           <button
             onClick={() => navigateMonth('prev')}
-            className="px-3 py-1 rounded bg-gray-700 text-white hover:bg-gray-600 transition"
+            className="px-3 py-1 rounded bg-gray-700 text-white hover:bg-gray-600 transition text-sm sm:text-base"
           >
             ←
           </button>
           <button
             onClick={() => navigateMonth('next')}
-            className="px-3 py-1 rounded bg-gray-700 text-white hover:bg-gray-600 transition"
+            className="px-3 py-1 rounded bg-gray-700 text-white hover:bg-gray-600 transition text-sm sm:text-base"
           >
             →
           </button>
@@ -84,14 +86,16 @@ const Calendar: React.FC = () => {
       {/* No schedule prompt */}
       {!hasSchedule && (
         <div className="mb-5 p-4 bg-blue-900 rounded-lg text-center text-blue-300">
-          📅 No subjects added yet. <a href="/subjects" className="underline text-blue-200">Add subjects</a> to get started!
+          <p className="text-sm sm:text-base">
+            📅 No subjects added yet. <a href="/subjects" className="underline text-blue-200">Add subjects</a> to get started!
+          </p>
         </div>
       )}
 
       {/* Weekdays */}
       <div className="grid grid-cols-7 gap-1 mb-3">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-          <div key={day} className="text-center text-sm text-gray-400 font-medium py-1">
+          <div key={day} className="text-center text-xs sm:text-sm text-gray-400 font-medium py-1">
             {day}
           </div>
         ))}
@@ -111,21 +115,22 @@ const Calendar: React.FC = () => {
               key={day.toISOString()}
               onClick={() => handleDateClick(day)}
               className={`
-                flex flex-col items-center justify-center aspect-square rounded-lg text-sm font-semibold transition
+                flex flex-col items-center justify-center aspect-square rounded-lg text-xs sm:text-sm font-semibold transition
                 ${status.color} text-white hover:opacity-90
                 ${isCurrentDay ? 'ring-2 ring-blue-400' : ''}
                 ${isSelected ? 'ring-2 ring-cyan-400' : ''}
+                min-h-[2.5rem] sm:min-h-[3rem]
               `}
             >
               <span>{format(day, 'd')}</span>
-              {status.count > 0 && <span className="text-xs font-normal">{status.count}</span>}
+              {status.count > 0 && <span className="text-[10px] sm:text-xs font-normal">{status.count}</span>}
             </button>
           );
         })}
       </div>
 
       {/* Legend */}
-      <div className="mt-6 flex flex-wrap gap-4 text-sm text-gray-300">
+      <div className="mt-4 sm:mt-6 flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-gray-300">
         {[
           ['bg-green-600', 'Attended'],
           ['bg-red-600', 'Missed'],
@@ -133,7 +138,7 @@ const Calendar: React.FC = () => {
           ['bg-yellow-500', 'Weekend'],
           ['bg-gray-600', 'No Classes']
         ].map(([color, label]) => (
-          <div key={label} className="flex items-center gap-2">
+          <div key={label} className="flex items-center gap-1 sm:gap-2">
             <div className={`w-3 h-3 rounded ${color}`} />
             <span>{label}</span>
           </div>

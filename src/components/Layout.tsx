@@ -1,18 +1,21 @@
 import React from 'react';
-import { Outlet, useLoaderData } from 'react-router-dom';
-import Header from './Header';
+import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
+import Header from './Header';
 
 const Layout: React.FC = () => {
-  const { user } = useLoaderData() as { user: any };
-  
   return (
-    <div className="min-h-screen bg-black dark:bg-gray-900">
-      <Header />
-      <div className="flex">
-        <Sidebar />
-        <main className="flex-1 p-6">
-          <Outlet context={{ user }} />
+    <div className="min-h-screen bg-black flex">
+      {/* Desktop Sidebar */}
+      <div className="hidden lg:block">
+        <Sidebar isOpen={false} onClose={() => {}} />
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col">
+        <Header />
+        <main className="flex-1 overflow-auto">
+          <Outlet />
         </main>
       </div>
     </div>

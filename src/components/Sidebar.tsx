@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
-import { BarChart3, Home, Settings, Book, ChevronLeft, ChevronRight } from 'lucide-react';
+import { BarChart3, Home, Settings, Book, X } from 'lucide-react';
 
 const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
@@ -9,20 +9,76 @@ const navigation = [
   { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
-export default function Sidebar() {
-  const [collapsed, setCollapsed] = useState(false);
+interface SidebarProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+  // Close sidebar on window resize to desktop size
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1024 && isOpen) {
+        onClose();
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isOpen, onClose]);
+
+  // Close sidebar on escape key press
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && isOpen) {
+        onClose();
+      }
+    };
+
+    document.addEventListener('keydown', handleEscape);
+    return () => document.removeEventListener('keydown', handleEscape);
+  }, [isOpen, onClose]);
+
+  // Prevent body scroll when sidebar is open on mobile
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen]);
 
   return (
-    <aside
-      className={`${
-        collapsed ? 'w-20' : 'w-64'
-      } bg-gray-950 border-r border-gray-800 min-h-screen px-4 py-6 flex flex-col transition-all duration-300`}
-    >
-      {/* Toggle Button */}
-      <div className="flex items-center justify-between mb-6">
-        {!collapsed && (
+    <>
+      {/* Mobile Overlay */}
+      {isOpen && (
+        <div 
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 lg:hidden"
+          onClick={onClose}
+          role="button"
+          aria-label="Close sidebar"
+        />
+      )}
+
+      {/* Sidebar */}
+      <aside
+        className={`
+          fixed lg:static inset-y-0 left-0 z-50 w-64 bg-gray-950 border-r border-gray-800 
+          transform transition-transform duration-300 ease-in-out lg:translate-x-0
+          ${isOpen ? 'translate-x-0' : '-translate-x-full'}
+          flex flex-col min-h-screen lg:min-h-0 shadow-2xl lg:shadow-none
+        `}
+        role="navigation"
+        aria-label="Main navigation"
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 lg:p-6 border-b border-gray-800 lg:border-b-0">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 flex items-center justify-center bg-gray-800 rounded-md">
+            <div className="w-9 h-9 flex items-center justify-center bg-gray-800 rounded-md shadow-inner">
               <span className="text-lg text-white">📅</span>
             </div>
             <h1 className="text-white text-xl font-bold tracking-wide">
@@ -30,44 +86,53 @@ export default function Sidebar() {
               <span className="text-blue-500">Check</span>
             </h1>
           </div>
-        )}
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="text-gray-400 hover:text-white p-1 rounded-md hover:bg-gray-800"
-        >
-          {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
-        </button>
-      </div>
-
-      {/* Navigation */}
-      <nav className="flex flex-col gap-3 flex-1">
-        {navigation.map((item) => {
-          const Icon = item.icon;
-          return (
-            <NavLink
-              key={item.name}
-              to={item.href}
-              className={({ isActive }) =>
-                `flex items-center gap-3 px-3 py-2 rounded-lg transition-all text-sm font-medium ${
-                  isActive
-                    ? 'bg-blue-600 text-white shadow'
-                    : 'text-gray-400 hover:bg-gray-800 hover:text-white'
-                }`
-              }
-            >
-              <Icon className="w-5 h-5" />
-              {!collapsed && <span>{item.name}</span>}
-            </NavLink>
-          );
-        })}
-      </nav>
-
-      {/* Footer */}
-      {!collapsed && (
-        <div className="pt-8 text-xs text-gray-600 border-t border-gray-800 mt-6">
-          <p className="text-center">&copy; {new Date().getFullYear()} ClassCheck</p>
+          
+          {/* Close button for mobile */}
+          <button
+            onClick={onClose}
+            className="lg:hidden text-gray-400 hover:text-white p-2 rounded-md hover:bg-gray-800 transition-colors"
+            aria-label="Close sidebar"
+          >
+            <X size={20} />
+          </button>
         </div>
-      )}
-    </aside>
+
+        {/* Navigation */}
+        <nav className="flex flex-col gap-1 flex-1 px-3 lg:px-4 py-4" role="navigation">
+          {navigation.map((item) => {
+            const Icon = item.icon;
+            return (
+              <NavLink
+                key={item.name}
+                to={item.href}
+                onClick={onClose} // Close sidebar on mobile when nav item is clicked
+                className={({ isActive }) =>
+                  `flex items-center gap-3 px-3 py-3 rounded-xl transition-all duration-200 text-sm font-medium group ${
+                    isActive
+                      ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/25'
+                      : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                  }`
+                }
+              >
+                <Icon className={`w-5 h-5 transition-transform duration-200 ${
+                  'group-hover:scale-110'
+                }`} />
+                <span>{item.name}</span>
+              </NavLink>
+            );
+          })}
+        </nav>
+
+        {/* Footer */}
+        <div className="p-4 lg:p-6 text-xs text-gray-500 border-t border-gray-800 mt-auto">
+          <p className="text-center font-medium">
+            &copy; {new Date().getFullYear()} ClassCheck
+          </p>
+          <p className="text-center text-gray-600 mt-1">
+            v1.0.0
+          </p>
+        </div>
+      </aside>
+    </>
   );
 }

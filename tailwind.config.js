@@ -10,6 +10,13 @@ export default {
         'bg-secondary': '#2d2d2d',
         'text-primary': '#ffffff',
         'text-secondary': '#b0b0b0'
+      },
+      screens: {
+        xs: '360px',
+        sm: '640px',
+        md: '768px',
+        lg: '1024px',
+        xl: '1280px',
       }
     }
   },
