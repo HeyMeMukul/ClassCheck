@@ -15,62 +15,36 @@ const Settings: React.FC = () => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="min-h-screen px-6 py-10 bg-black text-white space-y-8">
+      {/* Header */}
       <div className="flex justify-between items-center">
-        <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-          Settings
-        </h1>
-        <p className="text-sm text-gray-600 dark:text-gray-400">
-          Logged in as: {user?.name || 'User'}
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight text-white">Settings</h1>
+        <p className="text-sm text-gray-400">Logged in as: <span className="font-medium">{user?.name || 'User'}</span></p>
       </div>
-      
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-          Account Information
+
+      {/* Card */}
+      <div className="bg-gray-900 rounded-2xl shadow-xl p-8 w-full max-w-3xl mx-auto">
+        <h2 className="text-xl font-semibold text-white mb-6 border-b border-gray-700 pb-3">
+          👤 Account Information
         </h2>
-        
-        <div className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Name
-            </label>
-            <p className="mt-1 text-gray-900 dark:text-white">
-              {user?.name || 'Not provided'}
-            </p>
-          </div>
-          
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Email
-            </label>
-            <p className="mt-1 text-gray-900 dark:text-white">
-              {user?.email || 'Not provided'}
-            </p>
-          </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              User ID
-            </label>
-            <p className="mt-1 text-gray-900 dark:text-white font-mono text-sm">
-              {user?.$id || 'Not provided'}
-            </p>
-          </div>
+        <div className="space-y-6 text-sm">
+          <Info label="Name" value={user?.name || 'Not provided'} />
+          <Info label="Email" value={user?.email || 'Not provided'} />
+          <Info label="User ID" value={user?.$id || 'Not provided'} code />
+          <Info
+            label="Member Since"
+            value={
+              user?.$createdAt
+                ? new Date(user.$createdAt).toLocaleDateString()
+                : 'Not provided'
+            }
+          />
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
-              Member Since
-            </label>
-            <p className="mt-1 text-gray-900 dark:text-white">
-              {user?.$createdAt ? new Date(user.$createdAt).toLocaleDateString() : 'Not provided'}
-            </p>
-          </div>
-          
-          <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="pt-6 border-t border-gray-700">
             <button
               onClick={handleLogout}
-              className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded"
+              className="w-full bg-red-600 hover:bg-red-700 transition-all duration-150 py-2.5 rounded-md text-sm font-medium text-white"
             >
               Logout
             </button>
@@ -80,5 +54,21 @@ const Settings: React.FC = () => {
     </div>
   );
 };
+
+/* Info Display Component */
+interface InfoProps {
+  label: string;
+  value: string;
+  code?: boolean;
+}
+
+const Info: React.FC<InfoProps> = ({ label, value, code }) => (
+  <div>
+    <label className="block text-gray-400 font-medium mb-1">{label}</label>
+    <p className={`text-white ${code ? 'font-mono text-xs break-all' : 'text-sm'}`}>
+      {value}
+    </p>
+  </div>
+);
 
 export default Settings;

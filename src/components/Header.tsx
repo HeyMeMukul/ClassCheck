@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { useAttendance } from '../contexts/AttendanceContext';
 import { Button } from './ui/Button';
 
-export const Header: React.FC = () => {
+const Header: React.FC = () => {
   const { user, logout } = useAuth();
   const { calculatePercentage } = useAttendance();
 
@@ -17,27 +17,30 @@ export const Header: React.FC = () => {
   };
 
   return (
-    <header className="bg-bg-secondary border-r dark:bg-gray-800 shadow-sm border-b dark:border-gray-700">
+    <header className="bg-gray-900 dark:bg-gray-800 shadow-sm border-b border-gray-700">
       <div className="px-6 py-4">
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-4">
-       
             <div className="hidden md:flex items-center space-x-2">
-              <span className="text-sm text-white dark:text-gray-400">
-                Current Attendance :
+              <span className="text-sm text-gray-100 dark:text-gray-400">
+                Current Attendance:
               </span>
-              <span className={`text-sm font-semibold ${
-                calculatePercentage() >= 75 ? 'text-green-600' : 'text-red-600'
-              }`}>
+              <span
+                className={`text-sm font-semibold ${
+                  calculatePercentage() >= 75
+                    ? 'text-green-500 dark:text-green-400'
+                    : 'text-red-500 dark:text-red-400'
+                }`}
+              >
                 {calculatePercentage()}%
               </span>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-4">
             <div className="hidden md:block">
-              <span className="text-sm text-white dark:text-gray-400">
-                Welcome, {user?.name}
+              <span className="text-sm text-gray-100 dark:text-gray-400">
+                Welcome, {user?.name || 'User'}
               </span>
             </div>
             <Button variant="secondary" onClick={handleLogout}>
@@ -45,15 +48,19 @@ export const Header: React.FC = () => {
             </Button>
           </div>
         </div>
-        
+
         {/* Mobile attendance display */}
         <div className="md:hidden mt-2 flex items-center space-x-2">
-          <span className="text-sm text-gray-600 dark:text-gray-400">
+          <span className="text-sm text-gray-100 dark:text-gray-400">
             Current Attendance:
           </span>
-          <span className={`text-sm font-semibold ${
-            calculatePercentage() >= 75 ? 'text-green-600' : 'text-red-600'
-          }`}>
+          <span
+            className={`text-sm font-semibold ${
+              calculatePercentage() >= 75
+                ? 'text-green-500 dark:text-green-400'
+                : 'text-red-500 dark:text-red-400'
+            }`}
+          >
             {calculatePercentage()}%
           </span>
         </div>

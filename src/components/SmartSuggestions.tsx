@@ -1,6 +1,5 @@
 import React from 'react';
 import { useAttendance } from '../contexts/AttendanceContext';
-import { AttendanceRecord } from '../types/attendance';
 import { generateSmartSuggestions, getOverallPercentage } from '../utils/attendanceUtils';
 
 const SmartSuggestions: React.FC = () => {
@@ -10,41 +9,55 @@ const SmartSuggestions: React.FC = () => {
   const suggestions = generateSmartSuggestions(records);
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
-      <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">
-        Smart Suggestions
+    <div className="bg-gray-900 text-white rounded-2xl shadow-xl p-6">
+      <h2 className="text-2xl font-semibold mb-6">
+        💡 Smart Suggestions
       </h2>
       
-      <div className="mb-4">
+      {/* Attendance Overview */}
+      <div className="mb-6">
         <div className="flex items-center justify-between">
-          <span className="text-gray-600 dark:text-gray-400">Current Attendance</span>
-          <span className={`font-bold text-lg ${
-            percentage >= 75 ? 'text-green-600' : 'text-red-600'
+          <span className="text-gray-400 text-sm">Current Attendance</span>
+          <span className={`font-bold text-xl ${
+            percentage >= 75 ? 'text-green-400' : 'text-red-400'
           }`}>
             {percentage}%
           </span>
         </div>
+        <div className="h-2 mt-2 bg-gray-700 rounded-full overflow-hidden">
+          <div
+            className={`h-full rounded-full transition-all duration-500 ${
+              percentage >= 75 ? 'bg-green-500' : 'bg-red-500'
+            }`}
+            style={{ width: `${percentage}%` }}
+          ></div>
+        </div>
       </div>
 
+      {/* Suggestion List */}
       <div className="space-y-3">
         {suggestions.length > 0 ? (
-          suggestions.map((suggestion, index) => (
-            <div
-              key={index}
-              className={`p-3 rounded-lg border-l-4 ${
-                suggestion.includes('need to attend') || suggestion.includes('missed')
-                  ? 'bg-red-50 border-red-500 text-red-800 dark:bg-red-900/20 dark:text-red-300'
-                  : suggestion.includes('Excellent') || suggestion.includes('doing well')
-                  ? 'bg-green-50 border-green-500 text-green-800 dark:bg-green-900/20 dark:text-green-300'
-                  : 'bg-blue-50 border-blue-500 text-blue-800 dark:bg-blue-900/20 dark:text-blue-300'
-              }`}
-            >
-              <p className="text-sm">{suggestion}</p>
-            </div>
-          ))
+          suggestions.map((suggestion, index) => {
+            const lower = suggestion.toLowerCase();
+            let bgColor = 'bg-blue-900/30 border-blue-400 text-blue-300';
+            if (lower.includes('missed') || lower.includes('need to attend')) {
+              bgColor = 'bg-red-900/30 border-red-400 text-red-300';
+            } else if (lower.includes('excellent') || lower.includes('doing well')) {
+              bgColor = 'bg-green-900/30 border-green-400 text-green-300';
+            }
+
+            return (
+              <div
+                key={index}
+                className={`p-4 border-l-4 rounded-md ${bgColor} backdrop-blur-sm`}
+              >
+                <p className="text-sm leading-relaxed">{suggestion}</p>
+              </div>
+            );
+          })
         ) : (
-          <div className="text-gray-500 dark:text-gray-400 text-center py-4">
-            <p>No suggestions available. Start marking your attendance!</p>
+          <div className="text-center py-8 text-gray-400">
+            <p>📝 No suggestions available. Start marking your attendance!</p>
           </div>
         )}
       </div>
