@@ -84,7 +84,7 @@ const Reports: React.FC = () => {
           <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold tracking-tight">
             📊 Attendance Reports
           </h1>
-          <p className="text-sm sm:text-base text-gray-400">
+          <p className="text-sm sm:text-base text-neutral-400">
             Logged in as: <span className="font-medium">{user?.name || 'User'}</span>
           </p>
         </div>
@@ -95,9 +95,9 @@ const Reports: React.FC = () => {
             type="month"
             value={format(selectedMonth, 'yyyy-MM')}
             onChange={e => setSelectedMonth(new Date(e.target.value + '-01'))}
-            className="w-full sm:w-auto bg-gray-800 text-white border border-gray-600 px-3 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm sm:text-base"
+            className="w-full sm:w-auto bg-neutral-800 text-white border border-neutral-600 px-3 sm:px-4 py-2 sm:py-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none text-sm sm:text-base"
           />
-          <span className="text-gray-400 text-sm sm:text-base">
+          <span className="text-neutral-400 text-sm sm:text-base">
             Showing <span className="font-medium">{format(monthStart, 'MMMM yyyy')}</span>
           </span>
         </div>
@@ -115,7 +115,7 @@ const Reports: React.FC = () => {
         )}
 
         {/* Monthly Summary */}
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8">
+        <div className="bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8">
           <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-4 sm:mb-6">
             Monthly Summary
           </h2>
@@ -140,8 +140,8 @@ const Reports: React.FC = () => {
               label="Classes Cancelled" 
               value={stats.cancelled} 
               icon="⚪"
-              colorClass="text-gray-400"
-              bgClass="bg-gray-700/20 border-gray-600"
+              colorClass="text-neutral-400"
+              bgClass="bg-neutral-700/20 border-neutral-600"
             />
             <StatCard 
               label="Attendance Rate" 
@@ -153,13 +153,13 @@ const Reports: React.FC = () => {
           </div>
 
           {/* Additional Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-gray-700">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-neutral-700">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-              <span className="text-gray-400 text-sm sm:text-base">Total Planned Classes:</span>
+              <span className="text-neutral-400 text-sm sm:text-base">Total Planned Classes:</span>
               <span className="font-bold text-white text-lg sm:text-xl">{stats.totalPlanned}</span>
             </div>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-              <span className="text-gray-400 text-sm sm:text-base">Classes Recorded:</span>
+              <span className="text-neutral-400 text-sm sm:text-base">Classes Recorded:</span>
               <span className="font-bold text-white text-lg sm:text-xl">
                 {stats.attended + stats.missed + stats.cancelled}
               </span>
@@ -169,7 +169,7 @@ const Reports: React.FC = () => {
 
         {/* Subject-wise Breakdown */}
         {hasSchedule && subjectStats.length > 0 && (
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8">
+          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6 mb-6">
               <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold">
                 📚 Subject-wise Breakdown
@@ -182,26 +182,26 @@ const Reports: React.FC = () => {
               </button>
             </div>
 
-            <div className="overflow-x-auto rounded-lg border border-gray-700">
+            <div className="overflow-x-auto rounded-lg border border-neutral-700">
               <table className="min-w-full text-sm sm:text-base">
-                <thead className="bg-gray-800 border-b border-gray-700">
+                <thead className="bg-neutral-800 border-b border-neutral-700">
                   <tr>
-                    <th className="text-left px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-gray-200">
+                    <th className="text-left px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-neutral-200">
                       Subject
                     </th>
-                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-gray-200">
+                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-neutral-200">
                       Attended
                     </th>
-                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-gray-200">
+                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-neutral-200">
                       Missed
                     </th>
-                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-gray-200">
+                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-neutral-200">
                       Cancelled
                     </th>
-                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-gray-200">
+                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-neutral-200">
                       Total
                     </th>
-                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-gray-200">
+                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-neutral-200">
                       Rate
                     </th>
                   </tr>
@@ -210,7 +210,7 @@ const Reports: React.FC = () => {
                   {subjectStats.map((stat, index) => (
                     <tr 
                       key={index} 
-                      className="border-b border-gray-700 hover:bg-gray-800/50 transition-colors duration-150"
+                      className="border-b border-neutral-700 hover:bg-neutral-800/50 transition-colors duration-150"
                     >
                       <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-medium text-white break-words">
                         {stat.subject}
@@ -221,7 +221,7 @@ const Reports: React.FC = () => {
                       <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center text-red-400 font-medium">
                         {stat.missed}
                       </td>
-                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center text-gray-400 font-medium">
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center text-neutral-400 font-medium">
                         {stat.cancelled}
                       </td>
                       <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center text-white font-medium">
@@ -248,14 +248,14 @@ const Reports: React.FC = () => {
 
         {/* Weekly Schedule Overview */}
         {hasSchedule && (
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8">
+          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8">
             <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-4 sm:mb-6">
               🗓️ Weekly Schedule Overview
             </h2>
             
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
               {(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] as const).map(day => (
-                <div key={day} className="bg-gray-800 border border-gray-700 rounded-xl p-3 sm:p-4 lg:p-5 shadow-lg hover:shadow-xl transition-shadow duration-200">
+                <div key={day} className="bg-neutral-800 border border-neutral-700 rounded-xl p-3 sm:p-4 lg:p-5 shadow-lg hover:shadow-xl transition-shadow duration-200">
                   <h3 className="text-center font-bold text-white mb-2 sm:mb-3 text-sm sm:text-base lg:text-lg">
                     {day}
                   </h3>
@@ -264,13 +264,13 @@ const Reports: React.FC = () => {
                       schedule[day].map((subject, idx) => (
                         <div
                           key={idx}
-                          className="bg-gray-700 text-center text-xs sm:text-sm text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md break-words hover:bg-gray-600 transition-colors duration-150"
+                          className="bg-neutral-700 text-center text-xs sm:text-sm text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md break-words hover:bg-neutral-600 transition-colors duration-150"
                         >
                           {subject}
                         </div>
                       ))
                     ) : (
-                      <div className="text-gray-400 text-center text-xs sm:text-sm py-3 sm:py-4 italic">
+                      <div className="text-neutral-400 text-center text-xs sm:text-sm py-3 sm:py-4 italic">
                         No subjects
                       </div>
                     )}
@@ -297,7 +297,7 @@ interface StatCardProps {
 const StatCard: React.FC<StatCardProps> = ({ label, value, icon, colorClass, bgClass }) => (
   <div className={`${bgClass} border rounded-xl p-4 sm:p-6 text-center shadow-lg hover:shadow-xl transition-all duration-200 hover:scale-105`}>
     <div className="text-2xl sm:text-3xl lg:text-4xl mb-2 sm:mb-3">{icon}</div>
-    <div className="text-xs sm:text-sm text-gray-400 mb-1 sm:mb-2 font-medium">
+    <div className="text-xs sm:text-sm text-neutral-400 mb-1 sm:mb-2 font-medium">
       {label}
     </div>
     <div className={`text-xl sm:text-2xl lg:text-3xl font-bold ${colorClass}`}>

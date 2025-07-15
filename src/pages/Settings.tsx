@@ -21,14 +21,14 @@ const Settings: React.FC = () => {
         <br></br>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">⚙️ Settings</h1>
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-neutral-400">
             Logged in as: <span className="font-medium">{user?.name || 'User'}</span>
           </p>
         </div>
 
         {/* Settings Card */}
-        <div className="bg-gray-900 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 w-full max-w-4xl mx-auto">
-          <h2 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 border-b border-gray-700 pb-3">
+        <div className="bg-neutral-900 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8 w-full max-w-4xl mx-auto">
+          <h2 className="text-lg sm:text-xl font-semibold text-white mb-4 sm:mb-6 border-b border-neutral-700 pb-3">
             👤 Account Information
           </h2>
 
@@ -45,7 +45,7 @@ const Settings: React.FC = () => {
               }
             />
 
-            <div className="pt-4 sm:pt-6 border-t border-gray-700">
+            <div className="pt-4 sm:pt-6 border-t border-neutral-700">
               <button
                 onClick={handleLogout}
                 className="w-full bg-red-600 hover:bg-red-700 transition-all duration-150 py-2.5 sm:py-3 rounded-md text-sm sm:text-base font-medium text-white"
@@ -72,11 +72,11 @@ interface InfoProps {
 
 const Info: React.FC<InfoProps> = ({ label, value, code }) => (
   <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
-    <label className="block text-gray-400 font-medium w-full sm:w-32 flex-shrink-0">
+    <label className="block text-neutral-400 font-medium w-full sm:w-32 flex-shrink-0">
       {label}
     </label>
     <div className="flex-1">
-      <p className={`text-white break-words ${code ? 'font-mono text-xs sm:text-sm bg-gray-800 px-2 py-1 rounded' : 'text-sm sm:text-base'}`}>
+      <p className={`text-white break-words ${code ? 'font-mono text-xs sm:text-sm bg-neutral-800 px-2 py-1 rounded' : 'text-sm sm:text-base'}`}>
         {value}
       </p>
     </div>

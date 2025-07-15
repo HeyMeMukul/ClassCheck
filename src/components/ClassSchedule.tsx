@@ -45,7 +45,7 @@ const ClassSchedule: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-900 text-white rounded-2xl shadow-xl p-4 sm:p-6">
+    <div className="bg-neutral-900 text-white rounded-2xl shadow-xl p-4 sm:p-6">
       <h2 className="text-xl sm:text-2xl font-semibold mb-4 sm:mb-6">
         <span className="hidden sm:inline">📖 Classes for {format(selectedDateObj, 'PPP')}</span>
         <span className="sm:hidden">📖 {format(selectedDateObj, 'MMM d, yyyy')}</span>

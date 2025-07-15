@@ -84,7 +84,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       {/* Sidebar */}
       <aside
         className={`
-          fixed lg:static inset-y-0 left-0 z-50 w-64 bg-gray-950 border-r border-gray-800 
+          fixed lg:static inset-y-0 left-0 z-50 w-64 bg-neutral-900 border-r border-gray-800 
           transform transition-transform duration-300 ease-in-out lg:translate-x-0
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
           flex flex-col min-h-screen lg:min-h-0 shadow-2xl lg:shadow-none

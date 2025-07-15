@@ -34,7 +34,7 @@ const ManageSubjects: React.FC = () => {
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">📚 Manage Subjects</h1>
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-neutral-400">
               Logged in as: <span className="font-medium">{user?.name || 'User'}</span>
             </p>
             <button
@@ -54,8 +54,8 @@ const ManageSubjects: React.FC = () => {
         </div>
 
         {/* Add New Subject */}
-        <div className="bg-gray-900 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8">
-          <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 border-b border-gray-700 pb-3">
+        <div className="bg-neutral-900 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8">
+          <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 border-b border-neutral-700 pb-3">
             ➕ Add New Subject
           </h2>
           
@@ -64,7 +64,7 @@ const ManageSubjects: React.FC = () => {
               <select
                 value={selectedDay}
                 onChange={(e) => setSelectedDay(e.target.value as keyof WeeklySchedule)}
-                className="w-full sm:w-48 px-3 py-2 rounded-md bg-gray-800 border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full sm:w-48 px-3 py-2 rounded-md bg-neutral-700 border border-neutral-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
               >
                 {weekdays.map(day => (
                   <option key={day} value={day}>{day}</option>
@@ -77,14 +77,14 @@ const ManageSubjects: React.FC = () => {
                 onChange={(e) => setNewSubject(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Enter subject name..."
-                className="flex-1 px-3 py-2 rounded-md bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="flex-1 px-3 py-2 rounded-md bg-neutral-800 border border-neutral-600 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
 
             <button
               onClick={handleAddSubject}
               disabled={!newSubject.trim()}
-              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 disabled:bg-gray-500 text-white px-6 py-2 rounded-md font-medium transition-all"
+              className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 disabled:bg-neutral-500 text-white px-6 py-2 rounded-md font-medium transition-all"
             >
               Add Subject
             </button>
@@ -92,21 +92,21 @@ const ManageSubjects: React.FC = () => {
         </div>
 
         {/* Weekly Schedule */}
-        <div className="bg-gray-900 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8">
-          <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 border-b border-gray-700 pb-3">
+        <div className="bg-neutral-900 rounded-2xl shadow-xl p-4 sm:p-6 lg:p-8">
+          <h2 className="text-lg sm:text-xl font-semibold mb-4 sm:mb-6 border-b border-neutral-700 pb-3">
             📆 Weekly Schedule
           </h2>
           
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
             {weekdays.map(day => (
-              <div key={day} className="bg-gray-800 p-3 sm:p-4 rounded-lg">
+              <div key={day} className="bg-neutral-800 p-3 sm:p-4 rounded-lg">
                 <h3 className="font-medium text-center text-base sm:text-lg text-white mb-3">
                   {day}
                 </h3>
                 <div className="space-y-2">
                   {schedule[day].length > 0 ? (
                     schedule[day].map((subject, index) => (
-                      <div key={index} className="flex items-center justify-between bg-gray-700 p-2 rounded text-sm">
+                      <div key={index} className="flex items-center justify-between bg-neutral-700 p-2 rounded text-sm">
                         <span className="text-white truncate mr-2">{subject}</span>
                         <button
                           onClick={() => removeSubject(day, subject)}
@@ -117,7 +117,7 @@ const ManageSubjects: React.FC = () => {
                       </div>
                     ))
                   ) : (
-                    <p className="text-gray-400 text-sm text-center py-4">No subjects added</p>
+                    <p className="text-neutral-400 text-sm text-center py-4">No subjects added</p>
                   )}
                 </div>
               </div>

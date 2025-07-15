@@ -35,7 +35,7 @@ const Calendar: React.FC = () => {
     const weekdayName = getWeekdayName(date);
 
     if (!hasSchedule) {
-      return { type: 'no-schedule', color: 'bg-gray-500', count: 0 };
+      return { type: 'no-schedule', color: 'bg-neutral-700', count: 0 };
     }
     if (weekdayName === 'Saturday' || weekdayName === 'Sunday') {
       return { type: 'weekend', color: 'bg-yellow-500', count: 0 };
@@ -61,7 +61,7 @@ const Calendar: React.FC = () => {
   };
 
   return (
-    <div className="bg-gray-900 rounded-2xl p-4 sm:p-6 shadow-xl">
+    <div className="bg-neutral-900 rounded-2xl p-4 sm:p-6 shadow-xl">
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-6">
         <h2 className="text-xl sm:text-2xl font-semibold text-white">
@@ -85,7 +85,7 @@ const Calendar: React.FC = () => {
 
       {/* No schedule prompt */}
       {!hasSchedule && (
-        <div className="mb-5 p-4 bg-blue-900 rounded-lg text-center text-blue-300">
+        <div className="mb-5 p-4 bg-neutral-800 rounded-lg text-center text-blue-300">
           <p className="text-sm sm:text-base">
             📅 No subjects added yet. <a href="/subjects" className="underline text-blue-200">Add subjects</a> to get started!
           </p>
@@ -95,14 +95,14 @@ const Calendar: React.FC = () => {
       {/* Weekdays */}
       <div className="grid grid-cols-7 gap-1 mb-3">
         {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
-          <div key={day} className="text-center text-xs sm:text-sm text-gray-400 font-medium py-1">
+          <div key={day} className="text-center text-xs sm:text-sm text-neutral-200 font-medium py-1">
             {day}
           </div>
         ))}
       </div>
 
       {/* Days grid */}
-      <div className="grid grid-cols-7 gap-1">
+      <div className="grid grid-cols-7 gap-2 ">
         {Array.from({ length: firstDayIndex }).map((_, i) => <div key={`empty-${i}`} />)}
 
         {daysInMonth.map(day => {
