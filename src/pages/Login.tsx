@@ -19,7 +19,7 @@ const Login: React.FC = () => {
 
     try {
       if (isRegister) {
-        await register(email, password, name);
+        await register(name, email, password);
       } else {
         await login(email, password);
       }
