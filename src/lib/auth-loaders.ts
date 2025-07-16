@@ -28,25 +28,14 @@ export const requireAuth = async () => {
 
 export const redirectIfAuthenticated = async () => {
   console.log('🔍 redirectIfAuthenticated loader called');
-  try {
-    const user = await account.get();
-    console.log('✅ User check result:', user);
-    
-    if (user) {
-      console.log('🔄 User exists, redirecting to /dashboard');
-      throw redirect('/dashboard');
-    }
-    
-    const result = { user: null };
-    console.log('🎯 redirectIfAuthenticated returning:', result);
-    return result;
-  } catch (error) {
-    console.log('💥 redirectIfAuthenticated error:', error);
-    if (error.message?.includes('redirect')) {
-      throw error; // Re-throw redirect
-    }
-    const result = { user: null };
-    console.log('🎯 redirectIfAuthenticated returning (after error):', result);
-    return result;
+  const user = await account.get();
+  console.log('✅ User check result:', user);
+
+  if (user) {
+    console.log('🔄 User exists, redirecting to /dashboard');
+    throw redirect('/dashboard'); // ✅ Let React Router handle it
   }
+
+  console.log('🎯 redirectIfAuthenticated returning null user');
+  return { user: null };
 };
