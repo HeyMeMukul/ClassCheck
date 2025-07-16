@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-
+import { BackgroundBeamsWithCollision } from '@/components/BackgroundBeamsWithCollision';
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -32,10 +32,13 @@ const Login: React.FC = () => {
   };
 
   return (
+    <div className="bg-black text-white font-sans min-h-screen flex flex-col relative overflow-hidden">
+      {/* Background Animation */}
+      <BackgroundBeamsWithCollision className="absolute inset-0 -z-14" />
     <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
       {/* Header Row */}
       <div className="absolute top-0 left-0 w-full flex justify-between items-center p-4 z-10">
-        <div className="w-10 h-10 flex items-center justify-centerrounded-md">
+        <div className="w-10 h-10 flex items-center justify-center rounded-md">
           <span className="text-white text-lg logo"></span>
         </div>
         <button
@@ -48,9 +51,9 @@ const Login: React.FC = () => {
       </div>
 
       {/* Main Content Container */}
-      <div className="flex items-center justify-center w-full max-w-7xl mx-auto px-8">
-        {/* Left Side - "Class" */}
-        <div className="flex-1 flex justify-end pr-12">
+      <div className="flex flex-col md:flex-row items-center justify-center w-full max-w-7xl mx-auto px-4">
+        {/* Top (mobile) or Left (desktop) - "Class" */}
+        <div className="md:flex-1 flex justify-center md:justify-end mb-8 md:mb-0 md:pr-12">
           <span
             className="text-white font-bold text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight select-none animate-floating"
             style={{
@@ -123,8 +126,8 @@ const Login: React.FC = () => {
           </div>
         </div>
 
-        {/* Right Side - "Check" */}
-        <div className="flex-1 flex justify-start pl-12">
+        {/* Bottom (mobile) or Right (desktop) - "Check" */}
+        <div className="md:flex-1 flex justify-center md:justify-start mt-8 md:mt-0 md:pl-12">
           <span
             className="text-white font-bold text-6xl sm:text-7xl md:text-8xl lg:text-9xl tracking-tight select-none animate-floating"
             style={{
@@ -158,6 +161,7 @@ const Login: React.FC = () => {
           animation: slideup 0.8s ease-out;
         }
       `}</style>
+    </div>
     </div>
   );
 };
