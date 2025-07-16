@@ -5,8 +5,6 @@ export interface AttendanceRecord {
   date: string;      // YYYY-MM-DD format
   subject: string;
   status: AttendanceStatus;
-  userId?: string;
-  notes?: string;
   createdAt?: string;
   updatedAt?: string;
 }

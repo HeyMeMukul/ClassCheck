@@ -50,7 +50,7 @@ export const ScheduleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const setSchedule = (newSchedule: WeeklySchedule) => {
     setScheduleState(newSchedule);
   };
-
+  
   const addSubject = (day: keyof WeeklySchedule, subject: string) => {
     const trimmedSubject = subject.trim();
     if (trimmedSubject && !schedule[day].includes(trimmedSubject)) {

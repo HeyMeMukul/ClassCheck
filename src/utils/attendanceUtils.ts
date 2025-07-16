@@ -12,7 +12,7 @@ export const getOverallPercentage = (records: AttendanceRecord[]): number => {
   return Math.round((attended / validRecords.length) * 100);
 };
 
-export const getAttendanceStats = (records: AttendanceRecord[]): AttendanceStats => {
+export const getOverallAttendanceStats = (records: AttendanceRecord[]): AttendanceStats => {
   if (!records || records.length === 0) {
     return {
       totalClasses: 0,
@@ -59,7 +59,7 @@ export const getWeeklyStats = (records: AttendanceRecord[]): WeeklyStats => {
 };
 
 export const generateSmartSuggestions = (records: AttendanceRecord[], targetPercentage: number = 75): string[] => {
-  const stats = getAttendanceStats(records);
+  const stats = getOverallAttendanceStats(records);
   const suggestions: string[] = [];
 
   if (stats.percentage < targetPercentage) {
@@ -70,7 +70,7 @@ export const generateSmartSuggestions = (records: AttendanceRecord[], targetPerc
   } else if (stats.percentage >= targetPercentage) {
     const canMiss = Math.floor(stats.attended / (targetPercentage / 100)) - (stats.attended + stats.missed);
     if (canMiss > 0) {
-      suggestions.push(`You're doing well! You can miss ${canMiss} more class${canMiss !== 1 ? 'es' : ''} and still maintain ${targetPercentage}%.`);
+      suggestions.push(`You're doing well! If you miss ${canMiss} more class${canMiss !== 1 ? 'es' : ''} and still maintain ${targetPercentage}%.`);
     }
   }
 

@@ -1,8 +1,8 @@
 // Update src/contexts/AttendanceContext.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { getOverallPercentage, getAttendanceStats } from '../utils/attendanceUtils';
-import { AttendanceRecord, AttendanceStats } from '../types/attendance';
-
+import { getOverallPercentage, getOverallAttendanceStats } from '../utils/attendanceUtils';
+import { AttendanceRecord } from '../types/attendance';
+import { getWeeklyStats as calculateWeeklyStats } from '../utils/attendanceUtils';
 // Context code...
 
 
@@ -15,7 +15,8 @@ interface AttendanceContextType {
   getWeeklyStats: () => { attended: number; missed: number; cancelled: number };
   // Export utility functions through context
   getOverallPercentage: () => number;
-  getAttendanceStats: () => any;
+  getOverallAttendanceStats: () => any;
+  removeRecordsBySubject: (subject: string) => void;
 }
 
 const AttendanceContext = createContext<AttendanceContextType | undefined>(undefined);
@@ -29,9 +30,13 @@ export const useAttendance = () => {
 };
 
 export const AttendanceProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const removeRecordsBySubject = (subject: string) => {
+    setRecords(prev => prev.filter(r => r.subject !== subject));
+  };
+  
   const [records, setRecords] = useState<AttendanceRecord[]>([]);
 
-  // Load from localStorage on mount
+  // LOADS from localStorage on mount
   useEffect(() => {
     const savedRecords = localStorage.getItem('attendance-records');
     if (savedRecords) {
@@ -44,7 +49,7 @@ export const AttendanceProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
   }, []);
 
-  // Save to localStorage whenever records change
+  // SAVES to localStorage whenever 'records' change
   useEffect(() => {
     localStorage.setItem('attendance-records', JSON.stringify(records));
   }, [records]);
@@ -67,26 +72,13 @@ export const AttendanceProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     return records.find(r => r.date === date && r.subject === subject);
   };
 
+  
+
   const calculatePercentage = () => {
     return getOverallPercentage(records);
   };
 
-  const getWeeklyStats = () => {
-    const now = new Date();
-    const weekStart = new Date(now.setDate(now.getDate() - now.getDay()));
-    const weekEnd = new Date(now.setDate(now.getDate() - now.getDay() + 6));
-    
-    const weekRecords = records.filter(r => {
-      const recordDate = new Date(r.date);
-      return recordDate >= weekStart && recordDate <= weekEnd;
-    });
-
-    return {
-      attended: weekRecords.filter(r => r.status === 'attended').length,
-      missed: weekRecords.filter(r => r.status === 'missed').length,
-      cancelled: weekRecords.filter(r => r.status === 'cancelled').length,
-    };
-  };
+  const getWeeklyStats = () => calculateWeeklyStats(records);
 
   return (
     <AttendanceContext.Provider value={{
@@ -97,7 +89,8 @@ export const AttendanceProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       calculatePercentage,
       getWeeklyStats,
       getOverallPercentage: () => getOverallPercentage(records),
-      getAttendanceStats: () => getAttendanceStats(records)
+      getOverallAttendanceStats: () => getOverallAttendanceStats(records),
+      removeRecordsBySubject
     }}>
       {children}
     </AttendanceContext.Provider>

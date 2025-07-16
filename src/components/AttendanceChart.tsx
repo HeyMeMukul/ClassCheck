@@ -1,10 +1,10 @@
 import React from 'react';
 import { useAttendance } from '../contexts/AttendanceContext';
-import { getAttendanceStats } from '../utils/attendanceUtils';
+import { getOverallAttendanceStats } from '../utils/attendanceUtils';
 
 const AttendanceChart: React.FC = () => {
   const { records } = useAttendance();
-  const stats = getAttendanceStats(records);
+  const stats = getOverallAttendanceStats(records);
 
   const chartData = [
     { label: 'Attended', value: stats.attended, color: 'bg-green-500' },

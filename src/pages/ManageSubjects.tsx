@@ -1,11 +1,18 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useSchedule, WeeklySchedule } from '../contexts/ScheduleContext';
+import { useAttendance } from '../contexts/AttendanceContext';
 
 const ManageSubjects: React.FC = () => {
   const { user } = useAuth();
-  const { schedule, addSubject, removeSubject, resetSchedule } = useSchedule();
+  const { schedule, addSubject, resetSchedule } = useSchedule();
+  const { removeSubject } = useSchedule();
+  const { removeRecordsBySubject } = useAttendance();
 
+  const handleRemoveSubject = (day: keyof WeeklySchedule, subject: string) => {
+      removeSubject(day, subject);
+      removeRecordsBySubject(subject); // also clears attendance
+};
   const [newSubject, setNewSubject] = useState('');
   const [selectedDay, setSelectedDay] = useState<keyof WeeklySchedule>('Monday');
 
@@ -109,7 +116,7 @@ const ManageSubjects: React.FC = () => {
                       <div key={index} className="flex items-center justify-between bg-neutral-700 p-2 rounded text-sm">
                         <span className="text-white truncate mr-2">{subject}</span>
                         <button
-                          onClick={() => removeSubject(day, subject)}
+                          onClick={() => handleRemoveSubject(day, subject)}
                           className="text-red-400 hover:text-red-300 font-bold text-lg leading-none flex-shrink-0"
                         >
                           ×

@@ -30,7 +30,7 @@ const ClassSchedule: React.FC = () => {
     addRecord(record);
   };
 
-  const getAttendanceStatus = (subject: string) => {
+  const getSubjectAttendanceStatus = (subject: string) => {
     const record = getRecordForDateAndSubject(selectedDate, subject);
     return record?.status || 'none';
   };
@@ -85,7 +85,7 @@ const ClassSchedule: React.FC = () => {
       ) : (
         <div className="space-y-3 sm:space-y-4">
           {todaysSubjects.map((subject, index) => {
-            const status = getAttendanceStatus(subject);
+            const status = getSubjectAttendanceStatus(subject);
 
             return (
               <div
