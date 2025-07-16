@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { BackgroundBeamsWithCollision } from '@/components/BackgroundBeamsWithCollision';
+
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -33,8 +33,7 @@ const Login: React.FC = () => {
 
   return (
     <div className="bg-black text-white font-sans min-h-screen flex flex-col relative overflow-hidden">
-      {/* Background Animation */}
-      <BackgroundBeamsWithCollision className="absolute inset-0 -z-14" />
+     
     <div className="min-h-screen bg-black flex items-center justify-center relative overflow-hidden">
       {/* Header Row */}
       <div className="absolute top-0 left-0 w-full flex justify-between items-center p-4 z-10">
