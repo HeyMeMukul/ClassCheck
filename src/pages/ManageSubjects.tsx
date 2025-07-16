@@ -7,7 +7,7 @@ const ManageSubjects: React.FC = () => {
   const { user } = useAuth();
   const { schedule, addSubject, resetSchedule } = useSchedule();
   const { removeSubject } = useSchedule();
-  const { removeRecordsBySubject } = useAttendance();
+  const { removeRecordsBySubject, resetAllRecords } = useAttendance();
 
   const handleRemoveSubject = (day: keyof WeeklySchedule, subject: string) => {
       removeSubject(day, subject);
@@ -24,7 +24,10 @@ const ManageSubjects: React.FC = () => {
       setNewSubject('');
     }
   };
-
+  const handleResetSchedule=()=>{
+    resetSchedule();
+    resetAllRecords();
+  }
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleAddSubject();
   };
@@ -45,7 +48,7 @@ const ManageSubjects: React.FC = () => {
               Logged in as: <span className="font-medium">{user?.name || 'User'}</span>
             </p>
             <button
-              onClick={resetSchedule}
+              onClick={handleResetSchedule}
               className="bg-red-600 hover:bg-red-700 transition-all duration-150 text-white px-4 py-2 rounded-md text-sm font-medium"
             >
               🗑️ Reset All
@@ -170,3 +173,4 @@ const StatCard: React.FC<StatProps> = ({ label, value, color }) => (
 );
 
 export default ManageSubjects;
+

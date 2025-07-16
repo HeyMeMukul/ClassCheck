@@ -17,6 +17,7 @@ interface AttendanceContextType {
   getOverallPercentage: () => number;
   getOverallAttendanceStats: () => any;
   removeRecordsBySubject: (subject: string) => void;
+  resetAllRecords:()=>void;
 }
 
 const AttendanceContext = createContext<AttendanceContextType | undefined>(undefined);
@@ -33,7 +34,9 @@ export const AttendanceProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const removeRecordsBySubject = (subject: string) => {
     setRecords(prev => prev.filter(r => r.subject !== subject));
   };
-  
+  const resetAllRecords=()=>{
+    setRecords(prev => []);
+  }
   const [records, setRecords] = useState<AttendanceRecord[]>([]);
 
   // LOADS from localStorage on mount
@@ -90,7 +93,8 @@ export const AttendanceProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       getWeeklyStats,
       getOverallPercentage: () => getOverallPercentage(records),
       getOverallAttendanceStats: () => getOverallAttendanceStats(records),
-      removeRecordsBySubject
+      removeRecordsBySubject,
+      resetAllRecords
     }}>
       {children}
     </AttendanceContext.Provider>

@@ -1,6 +1,6 @@
 // src/contexts/ScheduleContext.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
-
+import { useAttendance } from './AttendanceContext';
 export interface WeeklySchedule {
   Monday: string[];
   Tuesday: string[];
