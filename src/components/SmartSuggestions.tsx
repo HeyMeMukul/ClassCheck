@@ -27,7 +27,7 @@ const SmartSuggestions: React.FC = () => {
       {/* Attendance Overview */}
       <div className="mb-4 sm:mb-6">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-gray-400 text-sm sm:text-base">Current Attendance</span>
+          <span className="text-gray-400 text-sm sm:text-base">Class Attendance</span>
           <span className={`font-bold text-lg sm:text-xl ${
             percentage >= 75 ? 'text-green-600' : 'text-red-227'
           }`}>
