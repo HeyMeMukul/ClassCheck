@@ -1,7 +1,7 @@
 import React from 'react';
 import { format, startOfMonth, endOfMonth, eachDayOfInterval, isSameDay, isToday, getDay } from 'date-fns';
 import { useCalendar } from '../contexts/CalendarContext';
-import { useSchedule } from '../contexts/ScheduleContext';
+import { useSchedule, Subject } from '../contexts/ScheduleContext';
 import { useAttendance } from '../contexts/AttendanceContext';
 
 const Calendar: React.FC = () => {
@@ -38,10 +38,10 @@ const Calendar: React.FC = () => {
       return { type: 'no-schedule', color: 'bg-neutral-700', count: 0 };
     }
     if (weekdayName === 'Saturday' || weekdayName === 'Sunday') {
-      return { type: 'weekend', color: 'bg-yellow-500', count: 0 };
+      return { type: 'weekend', color: 'bg-black', count: 0 };
     }
 
-    const subjects = getSubjectsForDay(weekdayName as keyof import('../contexts/ScheduleContext').WeeklySchedule);
+    const subjects: Subject[] = getSubjectsForDay(weekdayName as keyof import('../contexts/ScheduleContext').WeeklySchedule);
     const totalSubjects = subjects.length;
 
     if (totalSubjects === 0) {
@@ -54,8 +54,8 @@ const Calendar: React.FC = () => {
     const cancelled = dayRecords.filter(r => r.status === 'cancelled').length;
 
     if (attended > 0 && missed === 0) return { type: 'attended', color: 'bg-green-600', count: totalSubjects };
-    if (missed > 0 && attended === 0) return { type: 'missed', color: 'bg-red-600', count: totalSubjects };
-    if (cancelled > 0 && attended === 0 && missed === 0) return { type: 'cancelled', color: 'bg-gray-400', count: totalSubjects };
+    if (missed > 0 && attended === 0) return { type: 'missed', color: 'bg-red-227', count: totalSubjects };
+    if (cancelled > 0 && attended === 0 && missed === 0) return { type: 'cancelled', color: 'bg-gray-600', count: totalSubjects };
 
     return { type: 'mixed', color: 'bg-yellow-600', count: totalSubjects };
   };
@@ -133,9 +133,10 @@ const Calendar: React.FC = () => {
       <div className="mt-4 sm:mt-6 flex flex-wrap gap-2 sm:gap-4 text-xs sm:text-sm text-gray-300">
         {[
           ['bg-green-600', 'Attended'],
-          ['bg-red-600', 'Missed'],
-          ['bg-blue-500', 'Pending'],
-          ['bg-yellow-500', 'Weekend'],
+          ['bg-red-227', 'Missed'],
+          
+          ['bg-black', 'Weekend'],
+          
           ['bg-gray-600', 'No Classes']
         ].map(([color, label]) => (
           <div key={label} className="flex items-center gap-1 sm:gap-2">

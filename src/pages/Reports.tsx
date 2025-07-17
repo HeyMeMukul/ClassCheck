@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { endOfMonth, startOfMonth, eachDayOfInterval, format, getDay } from 'date-fns';
 import { useAttendance } from '../contexts/AttendanceContext';
-import { useSchedule } from '../contexts/ScheduleContext';
+import { useSchedule, Subject } from '../contexts/ScheduleContext';
 
 const Reports: React.FC = () => {
   const { user } = useAuth();
@@ -42,22 +42,25 @@ const Reports: React.FC = () => {
 
   const subjectStats = useMemo(() => {
     if (!hasSchedule) return [];
-    const allSubjects = Object.values(schedule).flat();
-    const uniqueSubjects = [...new Set(allSubjects)];
-
+    const allSubjects: Subject[] = Object.values(schedule).flat();
+    const uniqueSubjects: Subject[] = allSubjects.filter(
+      (s, idx, arr) => arr.findIndex(ss => ss.name === s.name) === idx
+    );
     return uniqueSubjects.map(subject => {
       const subjectRecords = records.filter(r =>
-        r.subject === subject && new Date(r.date) >= monthStart && new Date(r.date) <= monthEnd
+        r.subject === subject.name && new Date(r.date) >= monthStart && new Date(r.date) <= monthEnd
       );
       const attended = subjectRecords.filter(r => r.status === 'attended').length;
       const missed = subjectRecords.filter(r => r.status === 'missed').length;
       const cancelled = subjectRecords.filter(r => r.status === 'cancelled').length;
       const total = attended + missed + cancelled;
       const rate = total === 0 ? 0 : Math.round((attended / total) * 100);
-      return { subject, attended, missed, cancelled, total, rate };
+      return { subject: subject.name, isLab: subject.isLab, attended, missed, cancelled, total, rate };
     });
   }, [records, schedule, hasSchedule, monthStart, monthEnd]);
 
+  const classSubjectStats = subjectStats.filter(s => false ? s.isLab : !s.isLab);
+  const labSubjectStats = subjectStats.filter(s => true ? s.isLab : !s.isLab);
   const exportAsCSV = () => {
     const csvContent = [
       ['Subject', 'Attended', 'Missed', 'Cancelled', 'Total', 'Attendance Rate'].join(','),
@@ -114,65 +117,14 @@ const Reports: React.FC = () => {
           </div>
         )}
 
-        {/* Monthly Summary */}
-        <div className="bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8">
-          <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-4 sm:mb-6">
-            Monthly Summary
-          </h2>
-          
-          {/* Stats Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-            <StatCard 
-              label="Classes Attended" 
-              value={stats.attended} 
-              icon="✅"
-              colorClass="text-green-400"
-              bgClass="bg-green-900/20 border-green-700"
-            />
-            <StatCard 
-              label="Classes Missed" 
-              value={stats.missed} 
-              icon="❌"
-              colorClass="text-red-400"
-              bgClass="bg-red-900/20 border-red-700"
-            />
-            <StatCard 
-              label="Classes Cancelled" 
-              value={stats.cancelled} 
-              icon="⚪"
-              colorClass="text-neutral-400"
-              bgClass="bg-neutral-700/20 border-neutral-600"
-            />
-            <StatCard 
-              label="Attendance Rate" 
-              value={`${stats.attendanceRate}%`} 
-              icon="📈"
-              colorClass={stats.attendanceRate >= 75 ? "text-green-400" : "text-red-400"}
-              bgClass={stats.attendanceRate >= 75 ? "bg-green-900/20 border-green-700" : "bg-red-900/20 border-red-700"}
-            />
-          </div>
+        
 
-          {/* Additional Stats */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6 pt-4 sm:pt-6 border-t border-neutral-700">
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-              <span className="text-neutral-400 text-sm sm:text-base">Total Planned Classes:</span>
-              <span className="font-bold text-white text-lg sm:text-xl">{stats.totalPlanned}</span>
-            </div>
-            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
-              <span className="text-neutral-400 text-sm sm:text-base">Classes Recorded:</span>
-              <span className="font-bold text-white text-lg sm:text-xl">
-                {stats.attended + stats.missed + stats.cancelled}
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Subject-wise Breakdown */}
+        {/* Class-wise Breakdown */}
         {hasSchedule && subjectStats.length > 0 && (
           <div className="bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6 mb-6">
               <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold">
-                📚 Subject-wise Breakdown
+                📚 Class-wise Breakdown
               </h2>
               <button
                 onClick={exportAsCSV}
@@ -207,7 +159,7 @@ const Reports: React.FC = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {subjectStats.map((stat, index) => (
+                  {classSubjectStats.map((stat, index) => (
                     <tr 
                       key={index} 
                       className="border-b border-neutral-700 hover:bg-neutral-800/50 transition-colors duration-150"
@@ -215,10 +167,88 @@ const Reports: React.FC = () => {
                       <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-medium text-white break-words">
                         {stat.subject}
                       </td>
-                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center text-green-400 font-medium">
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center text-green-600 font-medium">
                         {stat.attended}
                       </td>
-                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center text-red-400 font-medium">
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center text-red-227 font-medium">
+                        {stat.missed}
+                      </td>
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center text-neutral-400 font-medium">
+                        {stat.cancelled}
+                      </td>
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center text-white font-medium">
+                        {stat.total}
+                      </td>
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center font-bold">
+                        <span className={`px-2 py-1 rounded-full text-xs sm:text-sm ${
+                          stat.rate >= 75 
+                            ? 'bg-green-900/50 text-green-400 border border-green-700' 
+                            : stat.rate >= 50 
+                            ? 'bg-yellow-900/50 text-yellow-400 border border-yellow-700' 
+                            : 'bg-red-900/50 text-red-400 border border-red-700'
+                        }`}>
+                          {stat.rate}%
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+        {/* Lab-wise Breakdown */}
+        {hasSchedule && subjectStats.length > 0 && (
+          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8">
+            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-6 mb-6">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold">
+                📚 Lab-wise Breakdown
+              </h2>
+              <button
+                onClick={exportAsCSV}
+                className="w-full sm:w-auto px-4 sm:px-6 py-2 sm:py-3 bg-green-600 hover:bg-green-700 text-white text-sm sm:text-base font-medium rounded-lg transition-colors duration-200 shadow-lg hover:shadow-xl"
+              >
+                💾 Export as CSV
+              </button>
+            </div>
+
+            <div className="overflow-x-auto rounded-lg border border-neutral-700">
+              <table className="min-w-full text-sm sm:text-base">
+                <thead className="bg-neutral-800 border-b border-neutral-700">
+                  <tr>
+                    <th className="text-left px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-neutral-200">
+                      Subject
+                    </th>
+                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-neutral-200">
+                      Attended
+                    </th>
+                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-neutral-200">
+                      Missed
+                    </th>
+                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-neutral-200">
+                      Cancelled
+                    </th>
+                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-neutral-200">
+                      Total
+                    </th>
+                    <th className="text-center px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-semibold text-neutral-200">
+                      Rate
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {labSubjectStats.map((stat, index) => (
+                    <tr 
+                      key={index} 
+                      className="border-b border-neutral-700 hover:bg-neutral-800/50 transition-colors duration-150"
+                    >
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 font-medium text-white break-words">
+                        {stat.subject}
+                      </td>
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center text-green-600 font-medium">
+                        {stat.attended}
+                      </td>
+                      <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center text-red-227 font-medium">
                         {stat.missed}
                       </td>
                       <td className="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 text-center text-neutral-400 font-medium">
@@ -246,40 +276,7 @@ const Reports: React.FC = () => {
           </div>
         )}
 
-        {/* Weekly Schedule Overview */}
-        {hasSchedule && (
-          <div className="bg-neutral-900 border border-neutral-800 rounded-2xl shadow-2xl p-4 sm:p-6 lg:p-8">
-            <h2 className="text-lg sm:text-xl lg:text-2xl font-semibold mb-4 sm:mb-6">
-              🗓️ Weekly Schedule Overview
-            </h2>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 lg:gap-6">
-              {(['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] as const).map(day => (
-                <div key={day} className="bg-neutral-800 border border-neutral-700 rounded-xl p-3 sm:p-4 lg:p-5 shadow-lg hover:shadow-xl transition-shadow duration-200">
-                  <h3 className="text-center font-bold text-white mb-2 sm:mb-3 text-sm sm:text-base lg:text-lg">
-                    {day}
-                  </h3>
-                  <div className="space-y-1 sm:space-y-2">
-                    {schedule[day].length > 0 ? (
-                      schedule[day].map((subject, idx) => (
-                        <div
-                          key={idx}
-                          className="bg-neutral-700 text-center text-xs sm:text-sm text-white px-2 sm:px-3 py-1 sm:py-2 rounded-md break-words hover:bg-neutral-600 transition-colors duration-150"
-                        >
-                          {subject}
-                        </div>
-                      ))
-                    ) : (
-                      <div className="text-neutral-400 text-center text-xs sm:text-sm py-3 sm:py-4 italic">
-                        No subjects
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
+        
       </div>
     </div>
   );

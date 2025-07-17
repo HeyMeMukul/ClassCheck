@@ -1,20 +1,27 @@
 // src/contexts/ScheduleContext.tsx
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { useAttendance } from './AttendanceContext';
+
+// Add Subject type
+export interface Subject {
+  name: string;
+  isLab: boolean;
+}
+
 export interface WeeklySchedule {
-  Monday: string[];
-  Tuesday: string[];
-  Wednesday: string[];
-  Thursday: string[];
-  Friday: string[];
+  Monday: Subject[];
+  Tuesday: Subject[];
+  Wednesday: Subject[];
+  Thursday: Subject[];
+  Friday: Subject[];
 }
 
 interface ScheduleContextType {
   schedule: WeeklySchedule;
   setSchedule: (schedule: WeeklySchedule) => void;
-  addSubject: (day: keyof WeeklySchedule, subject: string) => void;
-  removeSubject: (day: keyof WeeklySchedule, subject: string) => void;
-  getSubjectsForDay: (day: keyof WeeklySchedule) => string[];
+  addSubject: (day: keyof WeeklySchedule, subject: Subject) => void;
+  removeSubject: (day: keyof WeeklySchedule, subjectName: string) => void;
+  getSubjectsForDay: (day: keyof WeeklySchedule) => Subject[];
   hasSchedule: boolean;
   resetSchedule: () => void;
 }
@@ -51,23 +58,26 @@ export const ScheduleProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     setScheduleState(newSchedule);
   };
   
-  const addSubject = (day: keyof WeeklySchedule, subject: string) => {
-    const trimmedSubject = subject.trim();
-    if (trimmedSubject && !schedule[day].includes(trimmedSubject)) {
+  // Update addSubject to accept a Subject object
+  const addSubject = (day: keyof WeeklySchedule, subject: Subject) => {
+    const trimmedName = subject.name.trim();
+    if (trimmedName && !schedule[day].some(s => s.name === trimmedName)) {
       setScheduleState(prev => ({
         ...prev,
-        [day]: [...prev[day], trimmedSubject]
+        [day]: [...prev[day], { ...subject, name: trimmedName }]
       }));
     }
   };
 
-  const removeSubject = (day: keyof WeeklySchedule, subject: string) => {
+  // Update removeSubject to use subject name
+  const removeSubject = (day: keyof WeeklySchedule, subjectName: string) => {
     setScheduleState(prev => ({
       ...prev,
-      [day]: prev[day].filter(s => s !== subject)
+      [day]: prev[day].filter(s => s.name !== subjectName)
     }));
   };
 
+  // Update getSubjectsForDay to return Subject[]
   const getSubjectsForDay = (day: keyof WeeklySchedule) => {
     return schedule[day] || [];
   };

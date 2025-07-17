@@ -1,12 +1,22 @@
 import React from 'react';
 import { useAttendance } from '../contexts/AttendanceContext';
 import { generateSmartSuggestions, getOverallPercentage } from '../utils/attendanceUtils';
+import { useSchedule } from '../contexts/ScheduleContext';
 
 const SmartSuggestions: React.FC = () => {
   const { records } = useAttendance();
-  
-  const percentage = getOverallPercentage(records);
-  const suggestions = generateSmartSuggestions(records);
+  const { schedule } = useSchedule();
+
+  // Get all unique class (non-lab) subject names
+  const allSubjects = Object.values(schedule).flat();
+  const classSubjects = allSubjects.filter(s => !s.isLab);
+  const classSubjectNames = Array.from(new Set(classSubjects.map(s => s.name)));
+
+  // Filter records to only those for class (non-lab) subjects
+  const classRecords = records.filter(r => classSubjectNames.includes(r.subject));
+
+  const percentage = getOverallPercentage(classRecords);
+  const suggestions = generateSmartSuggestions(classRecords);
 
   return (
     <div className="bg-neutral-900 text-white rounded-2xl shadow-xl p-4 sm:p-6">
@@ -19,7 +29,7 @@ const SmartSuggestions: React.FC = () => {
         <div className="flex items-center justify-between mb-2">
           <span className="text-gray-400 text-sm sm:text-base">Current Attendance</span>
           <span className={`font-bold text-lg sm:text-xl ${
-            percentage >= 75 ? 'text-green-400' : 'text-red-400'
+            percentage >= 75 ? 'text-green-600' : 'text-red-227'
           }`}>
             {percentage}%
           </span>
@@ -27,7 +37,7 @@ const SmartSuggestions: React.FC = () => {
         <div className="h-2 bg-gray-700 rounded-full overflow-hidden">
           <div
             className={`h-full rounded-full transition-all duration-500 ${
-              percentage >= 75 ? 'bg-green-500' : 'bg-red-500'
+              percentage >= 75 ? 'bg-green-600' : 'bg-red-227'
             }`}
             style={{ width: `${percentage}%` }}
           />

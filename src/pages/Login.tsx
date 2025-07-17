@@ -105,7 +105,6 @@ const Login: React.FC = () => {
                 onChange={(e) => setPassword(e.target.value)}
                 required
               />
-
               <button
                 type="submit"
                 disabled={loading}

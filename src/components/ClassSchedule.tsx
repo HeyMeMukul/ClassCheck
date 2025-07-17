@@ -1,7 +1,7 @@
 import React from 'react';
 import { format, getDay } from 'date-fns';
 import { useCalendar } from '../contexts/CalendarContext';
-import { useSchedule } from '../contexts/ScheduleContext';
+import { useSchedule, Subject } from '../contexts/ScheduleContext';
 import { useAttendance } from '../contexts/AttendanceContext';
 
 const ClassSchedule: React.FC = () => {
@@ -15,23 +15,23 @@ const ClassSchedule: React.FC = () => {
   const dayName = weekdays[dayIndex];
 
   const isWeekday = dayName !== 'Saturday' && dayName !== 'Sunday';
-  const todaysSubjects = isWeekday && hasSchedule
+  const todaysSubjects: Subject[] = isWeekday && hasSchedule
     ? getSubjectsForDay(dayName as keyof import('../contexts/ScheduleContext').WeeklySchedule)
     : [];
 
-  const handleAttendanceChange = (subject: string, status: 'attended' | 'missed' | 'cancelled') => {
+  const handleAttendanceChange = (subject: Subject, status: 'attended' | 'missed' | 'cancelled') => {
     const record = {
-      id: `${selectedDate}-${subject}`,
+      id: `${selectedDate}-${subject.name}`,
       date: selectedDate,
-      subject,
+      subject: subject.name,
       status,
       userId: 'current-user',
     };
     addRecord(record);
   };
 
-  const getSubjectAttendanceStatus = (subject: string) => {
-    const record = getRecordForDateAndSubject(selectedDate, subject);
+  const getSubjectAttendanceStatus = (subject: Subject) => {
+    const record = getRecordForDateAndSubject(selectedDate, subject.name);
     return record?.status || 'none';
   };
 
@@ -89,12 +89,14 @@ const ClassSchedule: React.FC = () => {
 
             return (
               <div
-                key={`${subject}-${index}`}
+                key={`${subject.name}-${index}`}
                 className="bg-gray-800 border border-gray-700 rounded-xl p-3 sm:p-4 transition-shadow hover:shadow-md"
               >
                 <div className="flex flex-col sm:flex-row justify-between items-start gap-3 mb-3">
                   <div className="flex-1">
-                    <h3 className="font-semibold text-white text-sm sm:text-base">{subject}</h3>
+                    <h3 className="font-semibold text-white text-sm sm:text-base">
+                      {subject.name} {subject.isLab && <span className="ml-1 text-blue-400">(Lab)</span>}
+                    </h3>
                     <p className="text-xs sm:text-sm text-gray-400">
                       {dayName} • Class {index + 1}
                     </p>

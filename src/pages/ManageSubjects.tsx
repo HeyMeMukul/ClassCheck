@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { useSchedule, WeeklySchedule } from '../contexts/ScheduleContext';
+import { useSchedule, WeeklySchedule, Subject } from '../contexts/ScheduleContext';
 import { useAttendance } from '../contexts/AttendanceContext';
 
 const ManageSubjects: React.FC = () => {
@@ -14,14 +14,16 @@ const ManageSubjects: React.FC = () => {
       removeRecordsBySubject(subject); // also clears attendance
 };
   const [newSubject, setNewSubject] = useState('');
+  const [isLab, setIsLab] = useState(false);
   const [selectedDay, setSelectedDay] = useState<keyof WeeklySchedule>('Monday');
 
   const weekdays: (keyof WeeklySchedule)[] = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'];
 
   const handleAddSubject = () => {
     if (newSubject.trim()) {
-      addSubject(selectedDay, newSubject.trim());
+      addSubject(selectedDay, { name: newSubject.trim(), isLab });
       setNewSubject('');
+      setIsLab(false);
     }
   };
   const handleResetSchedule=()=>{
@@ -32,8 +34,14 @@ const ManageSubjects: React.FC = () => {
     if (e.key === 'Enter') handleAddSubject();
   };
 
-  const getTotalSubjects = () => Object.values(schedule).flat().length;
-  const getActiveDays = () => weekdays.filter(day => schedule[day].length > 0).length;
+
+
+  const getTotalClassSubjects = () => {
+    return Object.values(schedule).flat().filter((s: Subject) => !s.isLab).length;
+  };
+  const getTotalLabSubjects = () => {
+    return Object.values(schedule).flat().filter((s: Subject) => s.isLab).length;
+  };
 
   return (
     <div className="min-h-screen bg-black text-white">
@@ -49,7 +57,7 @@ const ManageSubjects: React.FC = () => {
             </p>
             <button
               onClick={handleResetSchedule}
-              className="bg-red-600 hover:bg-red-700 transition-all duration-150 text-white px-4 py-2 rounded-md text-sm font-medium"
+              className="bg-red-227 hover:bg-red-300 transition-all duration-150 text-white px-4 py-2 rounded-md text-sm font-medium"
             >
               🗑️ Reset All
             </button>
@@ -58,8 +66,8 @@ const ManageSubjects: React.FC = () => {
 
         {/* Quick Stats */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
-          <StatCard label="Total Subjects" value={getTotalSubjects()} color="blue" />
-          <StatCard label="Active Days" value={getActiveDays()} color="green" />
+          <StatCard label="Classes" value={getTotalClassSubjects()} color="blue" />
+          <StatCard label="Labs" value={getTotalLabSubjects()} color="green" />
           <StatCard label="Weekend Days" value="Always Free" color="purple" />
         </div>
 
@@ -89,6 +97,17 @@ const ManageSubjects: React.FC = () => {
                 placeholder="Enter subject name..."
                 className="flex-1 px-3 py-2 rounded-md bg-neutral-800 border border-neutral-600 text-white placeholder-neutral-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
+
+              {/* Lab toggle */}
+              <label className="flex items-center gap-2 text-sm">
+                <input
+                  type="checkbox"
+                  checked={isLab}
+                  onChange={e => setIsLab(e.target.checked)}
+                  className="form-checkbox h-4 w-4 text-blue-600"
+                />
+                Lab
+              </label>
             </div>
 
             <button
@@ -115,12 +134,12 @@ const ManageSubjects: React.FC = () => {
                 </h3>
                 <div className="space-y-2">
                   {schedule[day].length > 0 ? (
-                    schedule[day].map((subject, index) => (
-                      <div key={index} className="flex items-center justify-between bg-neutral-700 p-2 rounded text-sm">
-                        <span className="text-white truncate mr-2">{subject}</span>
+                    schedule[day].map((subject: Subject, idx: number) => (
+                      <div key={idx} className="flex items-center justify-between bg-neutral-700 p-2 rounded text-sm">
+                        <span className="text-white truncate mr-2">{subject.name} {subject.isLab && '(Lab)'}</span>
                         <button
-                          onClick={() => handleRemoveSubject(day, subject)}
-                          className="text-red-400 hover:text-red-300 font-bold text-lg leading-none flex-shrink-0"
+                          onClick={() => handleRemoveSubject(day, subject.name)}
+                          className="text-red-227 hover:text-red-300 font-bold text-lg leading-none flex-shrink-0"
                         >
                           ×
                         </button>
