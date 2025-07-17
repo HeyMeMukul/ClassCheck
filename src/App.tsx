@@ -12,7 +12,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ManageSubjects from './pages/ManageSubjects'; // New page
 import Reports from './pages/Reports';
-import Settings from './pages/Settings';
+
 import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary';
 
@@ -65,18 +65,7 @@ const router = createBrowserRouter([
       }
     ],
   },
-  {
-    path: '/settings',
-    element: <Layout />,
-    loader: requireAuth,
-    errorElement: <ErrorBoundary />,
-    children: [
-      {
-        index: true,
-        element: <Settings />,
-      }
-    ],
-  },
+  
   {
     path: '*',
     element: <NotFound />,

@@ -8,7 +8,6 @@ const navigation = [
   { name: 'Dashboard', href: '/dashboard', icon: Home },
   { name: 'Subjects', href: '/subjects', icon: Book },
   { name: 'Reports', href: '/reports', icon: BarChart3 },
-  { name: 'Settings', href: '/settings', icon: Settings },
   { name: 'Logout', href: '#', icon: X, action: 'handleLogout', className: 'text-red-500 hover:bg-red-600 hover:text-white', isActive: false },
 ];
 
