@@ -9,6 +9,8 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const [isRegister, setIsRegister] = useState(false);
   const [name, setName] = useState('');
+  const [showReset, setShowReset] = useState(false);
+  const [resetMessage, setResetMessage] = useState('');
   const { login, register } = useAuth();
   const navigate = useNavigate();
 
@@ -68,59 +70,85 @@ const Login: React.FC = () => {
         <div className="flex-shrink-0 w-80 animate-slideup">
           <div className="bg-gray-800 shadow-2xl rounded-2xl py-6 px-6 flex flex-col items-center">
             <h2 className="text-lg font-normal text-white mb-4 text-center">
-              {isRegister ? 'Sign Up' : 'Sign In To Your Account'}
+              {isRegister ? 'Sign Up' : showReset ? 'Forgot Password?' : 'Sign In To Your Account'}
             </h2>
 
-            <form className="space-y-3 w-full" onSubmit={handleSubmit} autoComplete="off">
-              {error && (
-                <div className="bg-red-100 border border-red-300 text-red-800 rounded-md px-3 py-2 text-sm">{error}</div>
-              )}
+            {showReset ? (
+              <div className="space-y-4 w-full text-center">
+                <div className="bg-blue-100 border border-blue-300 text-blue-800 rounded-md px-3 py-2 text-sm">
+                  If you forgot your password, email us at <b>classcheckrust@gmail.com</b>.
+                </div>
+                <button
+                  type="button"
+                  className="mt-2 text-gray-400 hover:text-white font-normal text-xs transition-colors w-full"
+                  onClick={() => setShowReset(false)}
+                >
+                  Back to Login
+                </button>
+              </div>
+            ) : (
+              <form className="space-y-3 w-full" onSubmit={handleSubmit} autoComplete="off">
+                {error && (
+                  <div className="bg-red-100 border border-red-300 text-red-800 rounded-md px-3 py-2 text-sm">{error}</div>
+                )}
 
-              {isRegister && (
+                {isRegister && (
+                  <input
+                    type="text"
+                    placeholder="Full Name"
+                    autoComplete="name"
+                    className="w-full px-3 py-2.5 rounded-md bg-gray-900 border border-gray-600 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
+                    value={name}
+                    onChange={(e) => setName(e.target.value)}
+                    required
+                  />
+                )}
                 <input
-                  type="text"
-                  placeholder="Full Name"
-                  autoComplete="name"
+                  type="email"
+                  placeholder="Email Address"
+                  autoComplete="email"
                   className="w-full px-3 py-2.5 rounded-md bg-gray-900 border border-gray-600 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   required
                 />
-              )}
-              <input
-                type="email"
-                placeholder="Email Address"
-                autoComplete="email"
-                className="w-full px-3 py-2.5 rounded-md bg-gray-900 border border-gray-600 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-              <input
-                type="password"
-                placeholder="Password"
-                autoComplete={isRegister ? "new-password" : "current-password"}
-                className="w-full px-3 py-2.5 rounded-md bg-gray-900 border border-gray-600 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full py-2.5 mt-4 rounded-md bg-white hover:bg-gray-100 transition-colors font-medium text-black shadow text-sm disabled:opacity-50"
-              >
-                {loading ? (isRegister ? 'Creating...' : 'Signing In...') : (isRegister ? 'Sign Up' : 'Sign In')}
-              </button>
-            </form>
+                <input
+                  type="password"
+                  placeholder="Password"
+                  autoComplete={isRegister ? "new-password" : "current-password"}
+                  className="w-full px-3 py-2.5 rounded-md bg-gray-900 border border-gray-600 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-1 focus:ring-gray-500 focus:border-gray-500"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full py-2.5 mt-4 rounded-md bg-white hover:bg-gray-100 transition-colors font-medium text-black shadow text-sm disabled:opacity-50"
+                >
+                  {loading ? (isRegister ? 'Creating...' : 'Signing In...') : (isRegister ? 'Sign Up' : 'Sign In')}
+                </button>
+              </form>
+            )}
 
-            <button
-              type="button"
-              className="mt-4 text-gray-400 hover:text-white font-normal text-xs transition-colors"
-              onClick={() => setIsRegister(!isRegister)}
-            >
-              {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
-            </button>
+            {!showReset && (
+              <>
+                <button
+                  type="button"
+                  className="mt-2 text-gray-400 hover:text-white font-normal text-xs transition-colors w-full"
+                  onClick={() => setShowReset(true)}
+                >
+                  Forgot Password?
+                </button>
+                <button
+                  type="button"
+                  className="mt-4 text-gray-400 hover:text-white font-normal text-xs transition-colors"
+                  onClick={() => setIsRegister(!isRegister)}
+                >
+                  {isRegister ? 'Already have an account? Sign In' : "Don't have an account? Sign Up"}
+                </button>
+              </>
+            )}
           </div>
         </div>
 
