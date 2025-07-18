@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useSchedule, WeeklySchedule, Subject } from '../contexts/ScheduleContext';
 import { useAttendance } from '../contexts/AttendanceContext';
+import { motion } from 'framer-motion';
 
 const ManageSubjects: React.FC = () => {
   const { user } = useAuth();
@@ -45,7 +46,12 @@ const ManageSubjects: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <div className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8">
+      <motion.div
+        className="p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8"
+        initial={{ opacity: 0, y: 60 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
+      >
         {/* Header */}
                 <div></div>
         <br></br>
@@ -172,7 +178,7 @@ const ManageSubjects: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

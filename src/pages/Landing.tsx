@@ -1,6 +1,6 @@
 import React from "react";
 import { BackgroundBeamsWithCollision } from "../components/BackgroundBeamsWithCollision"; // adjust path
-
+import { motion } from 'framer-motion';
 
 
 const Landing: React.FC = () => {
@@ -18,7 +18,12 @@ const Landing: React.FC = () => {
       </div>
 
       {/* Hero Section */}
-      <main className="flex-grow flex flex-col items-center justify-center px-6 text-center relative z-10">
+      <motion.main
+        className="flex-grow flex flex-col items-center justify-center px-6 text-center relative z-10"
+        initial={{ opacity: 0, y: 60 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
+      >
         <h1 className="text-[4rem] sm:text-[5.5rem] max-sm:text-[2rem] font-extrabold leading-tight">
           One goal.
           <br />
@@ -32,7 +37,7 @@ const Landing: React.FC = () => {
         >
           Sign In / Log In
         </button>
-      </main>
+      </motion.main>
 
       {/* Footer */}
       <footer className="text-center text-xs text-gray-500 py-6 relative z-10">

@@ -4,13 +4,19 @@ import Calendar from '../components/Calendar';
 import ClassSchedule from '../components/ClassSchedule';
 import SmartSuggestions from '../components/SmartSuggestions';
 import AttendanceChart from '../components/AttendanceChart';
+import { motion } from 'framer-motion';
 
 const Dashboard: React.FC = () => {
   const { user } = useAuth(); // ✅ Replace useOutletContext with useAuth
 
   return (
     <div className="min-h-screen bg-black text-white">
-      <div className="p-4 sm:p-6 lg:p-8 space-y-6">
+      <motion.div
+        className="p-4 sm:p-6 lg:p-8 space-y-6"
+        initial={{ opacity: 0, y: 60 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
+      >
         {/* Header */}
         <div></div>
         <br></br>
@@ -42,7 +48,7 @@ const Dashboard: React.FC = () => {
             <AttendanceChart />
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 };

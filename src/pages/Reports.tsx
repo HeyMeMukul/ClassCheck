@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext';
 import { endOfMonth, startOfMonth, eachDayOfInterval, format, getDay } from 'date-fns';
 import { useAttendance } from '../contexts/AttendanceContext';
 import { useSchedule, Subject } from '../contexts/ScheduleContext';
+import { motion } from 'framer-motion';
 
 const Reports: React.FC = () => {
   const { user } = useAuth();
@@ -79,7 +80,12 @@ const Reports: React.FC = () => {
   return (
 
     <div className="min-h-screen bg-black text-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8">
+      <motion.div
+        className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-6 sm:space-y-8"
+        initial={{ opacity: 0, y: 60 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: 'easeOut' }}
+      >
         {/* Header */}
                 <div></div>
         <br></br>
@@ -277,7 +283,7 @@ const Reports: React.FC = () => {
         )}
 
         
-      </div>
+      </motion.div>
     </div>
   );
 };
