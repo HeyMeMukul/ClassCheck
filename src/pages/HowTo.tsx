@@ -246,8 +246,8 @@ const HowTo: React.FC = () => {
       {/* Logo/Title */}
     
       {/* Main Card - Animated Step */}
-      <main className="flex-grow flex flex-col items-center justify-center px-6 text-center relative z-10">
-        <div className="relative w-full flex flex-col mb-4 items-center min-h-[420px] max-w-2xl mx-auto" style={{height: '70vh', outline: 'none'}}>
+      <main className="flex-grow flex flex-col items-center justify-center px-2 sm:px-6 text-center relative z-10">
+        <div className="relative w-full flex flex-col mb-4 items-center min-h-[340px] sm:min-h-[420px] max-w-full sm:max-w-2xl mx-auto" style={{height: '70vh', outline: 'none'}}>
         <h1 className="text-3xl sm:text-4xl font-extrabold mb-6 text-white">How to Use ClassCheck</h1>
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
@@ -263,7 +263,7 @@ const HowTo: React.FC = () => {
               <span className={`font-bold mb-2 text-2xl sm:text-3xl ${step.color}`}>{step.title}</span>
               <span className="mb-4 text-lg text-gray-200">{step.description}</span>
               <Lens>
-                <img src={step.img} alt={step.alt} className="rounded-lg shadow-lg w-full max-w-lg sm:max-w-xl border border-gray-700 mb-8" />
+                <img src={step.img} alt={step.alt} className="rounded-lg shadow-lg w-full max-w-xs sm:max-w-lg md:max-w-xl border border-gray-700 mb-8 object-contain" />
               </Lens>
               {currentStep === steps.length - 1 && (
                 <button
