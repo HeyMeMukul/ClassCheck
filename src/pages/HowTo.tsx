@@ -14,6 +14,7 @@ import SmartSuggestion from '../components/static/SmartSuggestion.png';
 import { BackgroundBeamsWithCollision } from '../components/BackgroundBeamsWithCollision';
 import { Lens } from "@/components/ui/lens";
 import { useNavigate } from 'react-router-dom';
+import { useSwipeable } from 'react-swipeable';
 
 const steps = [
   {
@@ -151,6 +152,25 @@ const HowTo: React.FC = () => {
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
 
+  // Swipeable handlers for mobile/desktop
+  const swipeHandlers = useSwipeable({
+    onSwipedLeft: () => {
+      if (currentStepRef.current < steps.length - 1) {
+        setDirection(1);
+        setCurrentStep(currentStepRef.current + 1);
+      }
+    },
+    onSwipedRight: () => {
+      if (currentStepRef.current > 0) {
+        setDirection(-1);
+        setCurrentStep(currentStepRef.current - 1);
+      }
+    },
+    delta: 40,
+    trackTouch: true,
+    trackMouse: false,
+  });
+
   // Scroll/keyboard/touch navigation
   useEffect(() => {
     const handleWheel = (e: WheelEvent) => {
@@ -247,7 +267,7 @@ const HowTo: React.FC = () => {
     
       {/* Main Card - Animated Step */}
       <main className="flex-grow flex flex-col items-center justify-center px-2 sm:px-6 text-center relative z-10">
-        <div className="relative w-full flex flex-col mb-4 items-center min-h-[340px] sm:min-h-[420px] max-w-full sm:max-w-2xl mx-auto" style={{height: '70vh', outline: 'none'}}>
+        <div {...swipeHandlers} className="relative w-full flex flex-col mb-4 items-center min-h-[340px] sm:min-h-[420px] max-w-full sm:max-w-2xl mx-auto" style={{height: '70vh', outline: 'none'}}>
         <h1 className="text-3xl sm:text-4xl font-extrabold mb-6 text-white">How to Use ClassCheck</h1>
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
