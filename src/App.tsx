@@ -12,6 +12,7 @@ import Login from './pages/Login';
 import Dashboard from './pages/Dashboard';
 import ManageSubjects from './pages/ManageSubjects'; // New page
 import Reports from './pages/Reports';
+import HowTo from './pages/HowTo';
 
 import NotFound from './pages/NotFound';
 import ErrorBoundary from './components/ErrorBoundary';
@@ -64,6 +65,11 @@ const router = createBrowserRouter([
         element: <Reports />,
       }
     ],
+  },
+  {
+    path: '/howto',
+    element: <HowTo />, // How To page for new users
+    errorElement: <ErrorBoundary />,
   },
   
   {

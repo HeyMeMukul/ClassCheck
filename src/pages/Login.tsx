@@ -22,10 +22,17 @@ const Login: React.FC = () => {
     try {
       if (isRegister) {
         await register(name, email, password);
+        localStorage.setItem('showHowTo', 'true'); // Set flag for new users
       } else {
         await login(email, password);
       }
-      navigate('/dashboard');
+      // Check for first-time flag
+      if (localStorage.getItem('showHowTo') === 'true') {
+        localStorage.removeItem('showHowTo');
+        navigate('/howto');
+      } else {
+        navigate('/dashboard');
+      }
     } catch (err: any) {
       setError(err.message || 'Authentication failed');
     } finally {
