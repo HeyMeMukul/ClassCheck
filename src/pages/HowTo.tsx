@@ -306,8 +306,8 @@ const HowTo: React.FC = () => {
             ))}
             
           </div>
-          <div className='mt-4 text-center text-xs text-gray-500'>Scroll down</div>
-          <div className='mt-4 text-center text-xs text-gray-500 block sm:hidden'>Touch to zoom</div>
+          <div className='mt-4 text-center text-xs text-gray-500 hidden sm:block'>Scroll down</div>
+          <div className='mt-4 text-center text-xs text-gray-500 block sm:hidden'>Swipe right</div>
       </main>
       {/* Footer */}
       
