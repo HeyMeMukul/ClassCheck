@@ -152,6 +152,14 @@ const HowTo: React.FC = () => {
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
   const navigate = useNavigate();
 
+  // Detect desktop view
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 640);
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 640);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   // Swipeable handlers for mobile/desktop
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => {
@@ -266,20 +274,54 @@ const HowTo: React.FC = () => {
       {/* Logo/Title */}
     
       {/* Main Card - Animated Step */}
-      <main className="flex-grow flex flex-col items-center justify-center px-2 sm:px-6 text-center relative z-10">
+      <main className="flex-grow flex flex-col sm:flex-row items-center justify-center px-2 sm:px-6 text-center relative z-10">
+        {/* Desktop: Vertical steps list */}
+        {isDesktop && (
+          <div className="hidden sm:flex flex-col items-end pr-8 min-h-[340px] sm:min-h-[420px] justify-center">
+            {steps.map((s, idx) => {
+              let textClass = '';
+              if (idx < currentStep) {
+                textClass = 'text-black font-semibold'; // completed steps
+              } else if (idx === currentStep) {
+                textClass = 'text-white font-bold'; // current step
+              } else {
+                textClass = 'text-gray-400'; // upcoming steps
+              }
+              return (
+                <div
+                  key={idx}
+                  className={`mb-2 px-4 py-2 text-lg transition-all duration-300 ${textClass}`}
+                >
+                  Step {idx + 1}
+                </div>
+              );
+            })}
+          </div>
+        )}
         <div {...swipeHandlers} className="relative w-full flex flex-col mb-4 items-center min-h-[340px] sm:min-h-[420px] max-w-full sm:max-w-2xl mx-auto" style={{height: '70vh', outline: 'none'}}>
-        <h1 className="text-3xl sm:text-4xl font-extrabold mb-6 text-white">How to Use ClassCheck</h1>
+          <h1 className="text-3xl sm:text-4xl font-extrabold mb-6 text-white">How to Use ClassCheck</h1>
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={currentStep}
               custom={direction}
-              initial={{ x: direction > 0 ? 300 : -300, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: direction > 0 ? -300 : 300, opacity: 0 }}
+              initial={
+                isDesktop
+                  ? { y: direction > 0 ? 300 : -300, opacity: 0 }
+                  : { x: direction > 0 ? 300 : -300, opacity: 0 }
+              }
+              animate={
+                isDesktop
+                  ? { y: 0, opacity: 1 }
+                  : { x: 0, opacity: 1 }
+              }
+              exit={
+                isDesktop
+                  ? { y: direction > 0 ? -300 : 300, opacity: 0 }
+                  : { x: direction > 0 ? -300 : 300, opacity: 0 }
+              }
               transition={{ type: 'spring', stiffness: 400, damping: 40, duration: 0.4 }}
               className="flex flex-col items-center w-full"
             >
-           
               <span className={`font-bold mb-2 text-2xl sm:text-3xl ${step.color}`}>{step.title}</span>
               <span className="mb-4 text-lg text-gray-200">{step.description}</span>
               <Lens>
@@ -295,17 +337,18 @@ const HowTo: React.FC = () => {
               )}
             </motion.div>
           </AnimatePresence>
-          
         </div>
-        <div className="flex items-center gap-2 mt-4">
+        {/* Dots for mobile only */}
+        {!isDesktop && (
+          <div className="flex items-center gap-2 mt-4">
             {steps.map((_, dotIdx) => (
               <span
                 key={dotIdx}
                 className={`inline-block w-3 h-3 rounded-full transition-all duration-300 ${dotIdx === currentStep ? 'bg-blue-400' : 'bg-gray-600'}`}
               />
             ))}
-            
           </div>
+        )}
           <div className='mt-4 text-center text-xs text-gray-500 hidden sm:block'>Scroll down</div>
           <div className='mt-4 text-center text-xs text-gray-500 block sm:hidden'>Swipe right</div>
       </main>
