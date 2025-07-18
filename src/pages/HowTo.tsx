@@ -310,9 +310,7 @@ const HowTo: React.FC = () => {
           <div className='mt-4 text-center text-xs text-gray-500 block sm:hidden'>Touch to zoom</div>
       </main>
       {/* Footer */}
-      <footer className="text-center text-xs text-gray-500 py-6 relative z-10">
-        © 2025 ClassCheck
-      </footer>
+      
     </div>
   );
 };
