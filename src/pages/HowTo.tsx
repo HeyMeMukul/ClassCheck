@@ -163,9 +163,7 @@ const HowTo: React.FC = () => {
     <div className="bg-black text-white font-sans min-h-screen flex flex-col relative overflow-hidden">
       <BackgroundBeamsWithCollision className="absolute inset-0 z-0" />
       {/* Logo/Title */}
-      <div className="pt-12 pb-4 text-[2rem] sm:text-[3.5rem] max-sm:text-[2rem] font-bold flex justify-center overflow-x-auto whitespace-nowrap relative z-10">
-        ClassCheck
-      </div>
+      
 
       {/* Main Card */}
       <main className="flex-grow flex flex-col items-center justify-center px-6 text-center relative z-10">
@@ -190,13 +188,14 @@ const HowTo: React.FC = () => {
                   </Lens>
                 </motion.div>
               </AnimatePresence>
-              <div className="flex justify-between w-full max-w-md mt-2">
+              <div className="flex justify-between w-full max-w-md mt-2 items-center">
                 <button
-                  className="px-6 py-2 rounded bg-gray-700 text-white font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-600 transition"
+                  className="px-4 py-2 rounded-full bg-gray-700 text-white font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-600 transition text-2xl"
                   onClick={handleBack}
                   disabled={currentStep === 0}
+                  aria-label="Back"
                 >
-                  Back
+                  &#8592;
                 </button>
                 <div className="flex items-center gap-2">
                   {steps.map((_, idx) => (
@@ -207,11 +206,12 @@ const HowTo: React.FC = () => {
                   ))}
                 </div>
                 <button
-                  className="px-6 py-2 rounded bg-blue-600 text-white font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-blue-500 transition"
+                  className="px-4 py-2 rounded-full bg-blue-600 text-white font-semibold disabled:opacity-40 disabled:cursor-not-allowed hover:bg-blue-500 transition text-2xl"
                   onClick={handleNext}
                   disabled={false}
+                  aria-label={currentStep === steps.length - 1 ? 'Go to Dashboard' : 'Next'}
                 >
-                  {currentStep === steps.length - 1 ? 'Go to Dashboard' : 'Next'}
+                  &#8594;
                 </button>
               </div>
             </div>
