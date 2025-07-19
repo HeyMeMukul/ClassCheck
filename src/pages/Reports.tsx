@@ -54,8 +54,8 @@ const Reports: React.FC = () => {
       const attended = subjectRecords.filter(r => r.status === 'attended').length;
       const missed = subjectRecords.filter(r => r.status === 'missed').length;
       const cancelled = subjectRecords.filter(r => r.status === 'cancelled').length;
-      const total = attended + missed + cancelled;
-      const rate = total === 0 ? 0 : Math.round((attended / total) * 100);
+      const total = attended + missed; // exclude cancelled
+      const rate = total === 0 ? 100 : Math.round((attended / total) * 100);
       return { subject: subject.name, isLab: subject.isLab, attended, missed, cancelled, total, rate };
     });
   }, [records, schedule, hasSchedule, monthStart, monthEnd]);
