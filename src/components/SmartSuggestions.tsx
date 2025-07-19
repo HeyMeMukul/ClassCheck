@@ -16,7 +16,7 @@ const SmartSuggestions: React.FC = () => {
   const classRecords = records.filter(r => classSubjectNames.includes(r.subject));
 
   const percentage = getOverallPercentage(classRecords);
-  const suggestions = generateSmartSuggestions(classRecords);
+  const suggestions = generateSmartSuggestions(classRecords, classSubjectNames);
 
   return (
     <div className="bg-neutral-900 text-white rounded-2xl shadow-xl p-4 sm:p-6">

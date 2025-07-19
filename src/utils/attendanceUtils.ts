@@ -58,26 +58,26 @@ export const getWeeklyStats = (records: AttendanceRecord[]): WeeklyStats => {
   return { attended, missed, cancelled, percentage };
 };
 
-export const generateSmartSuggestions = (records: AttendanceRecord[], targetPercentage: number = 75): string[] => {
-  const stats = getOverallAttendanceStats(records);
+export const generateSmartSuggestions = (
+  records: AttendanceRecord[],
+  classSubjectNames: string[],
+  targetPercentage: number = 75
+): string[] => {
+  // Only include records for non-lab (class) subjects
+  const nonLabRecords = records.filter(r => classSubjectNames.includes(r.subject));
+  const stats = getOverallAttendanceStats(nonLabRecords);
   const suggestions: string[] = [];
 
   if (stats.percentage < targetPercentage) {
-    const needed = Math.ceil( 3*stats.totalClasses-4*stats.attended);
+    const needed = Math.ceil(3 * stats.totalClasses - 4 * stats.attended);
     suggestions.push(`You need to attend ${needed} more class${needed !== 1 ? 'es' : ''} to reach ${targetPercentage}%.`);
   } else if (stats.percentage >= 90) {
     suggestions.push('Excellent attendance! Keep up the great work.');
   } else if (stats.percentage >= targetPercentage) {
     const canMiss = Math.floor(stats.attended / (targetPercentage / 100)) - (stats.attended + stats.missed);
     if (canMiss > 0) {
-      suggestions.push(`You're doing well! If you miss ${canMiss} more class${canMiss !== 1 ? 'es' : ''} and still maintain ${targetPercentage}%.`);
+      suggestions.push(`You're doing well! If you miss ${canMiss} more class${canMiss !== 1 ? 'es' : ''} ,you can still maintain ${targetPercentage}%.`);
     }
-  }
-
-  // Weekly analysis
-  const weeklyStats = getWeeklyStats(records);
-  if (weeklyStats.missed >= 2) {
-    suggestions.push(`You've missed ${weeklyStats.missed} classes this week. Try to attend all upcoming classes.`);
   }
 
   return suggestions;
