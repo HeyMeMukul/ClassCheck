@@ -69,7 +69,7 @@ export const generateSmartSuggestions = (
   const suggestions: string[] = [];
 
   if (stats.percentage < targetPercentage) {
-    const needed = Math.ceil(3 * stats.totalClasses - 4 * stats.attended);
+    const needed = Math.ceil(3 * (stats.attended+stats.missed) - 4 * stats.attended);
     suggestions.push(`You need to attend ${needed} more class${needed !== 1 ? 'es' : ''} to reach ${targetPercentage}%.`);
   } else if (stats.percentage >= 90) {
     suggestions.push('Excellent attendance! Keep up the great work.');
