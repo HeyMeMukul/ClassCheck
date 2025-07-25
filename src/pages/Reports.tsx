@@ -66,7 +66,7 @@ const Reports: React.FC = () => {
     const csvContent = [
       ['Subject', 'Attended', 'Missed', 'Cancelled', 'Total', 'Attendance Rate'].join(','),
       ...subjectStats.map(stat =>
-        [stat.subject, stat.attended, stat.missed, stat.cancelled, stat.total, `${stat.rate}%`].join(',')
+        [stat.subject, stat.attended, stat.missed, stat.cancelled, stat.attended+ stat.missed+ stat.cancelled, `${stat.rate}%`].join(',')
       )
     ].join('\n');
 
