@@ -13,7 +13,7 @@ const ManageSubjects: React.FC = () => {
   const handleRemoveSubject = (day: keyof WeeklySchedule, subject: string) => {
       removeSubject(day, subject);
       removeRecordsBySubject(subject); // also clears attendance
-};
+  };
   const [newSubject, setNewSubject] = useState('');
   const [isLab, setIsLab] = useState(false);
   const [selectedDay, setSelectedDay] = useState<keyof WeeklySchedule>('Monday');
@@ -22,7 +22,9 @@ const ManageSubjects: React.FC = () => {
 
   const handleAddSubject = () => {
     if (newSubject.trim()) {
-      addSubject(selectedDay, { name: newSubject.trim(), isLab });
+      // Keep this logic: it adds '(L)' to the name when adding a new lab subject
+      const subjectName = isLab ? `${newSubject.trim()} (Lab)` : newSubject.trim();
+      addSubject(selectedDay, { name: subjectName, isLab });
       setNewSubject('');
       setIsLab(false);
     }
@@ -35,12 +37,12 @@ const ManageSubjects: React.FC = () => {
     if (e.key === 'Enter') handleAddSubject();
   };
 
-
-
   const getTotalClassSubjects = () => {
+    // This logic relies on 'isLab' flag, not necessarily '(L)' in name
     return Object.values(schedule).flat().filter((s: Subject) => !s.isLab).length;
   };
   const getTotalLabSubjects = () => {
+    // This logic relies on 'isLab' flag
     return Object.values(schedule).flat().filter((s: Subject) => s.isLab).length;
   };
 
@@ -53,7 +55,7 @@ const ManageSubjects: React.FC = () => {
         transition={{ duration: 0.7, ease: 'easeOut' }}
       >
         {/* Header */}
-                <div></div>
+        <div></div>
         <br></br>
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
           <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">📚 Manage Subjects</h1>
@@ -140,17 +142,34 @@ const ManageSubjects: React.FC = () => {
                 </h3>
                 <div className="space-y-2">
                   {schedule[day].length > 0 ? (
-                    schedule[day].map((subject: Subject, idx: number) => (
-                      <div key={idx} className="flex items-center justify-between bg-neutral-700 p-2 rounded text-sm">
-                        <span className="text-white truncate mr-2">{subject.name} {subject.isLab && '(Lab)'}</span>
-                        <button
-                          onClick={() => handleRemoveSubject(day, subject.name)}
-                          className="text-red-227 hover:text-red-300 font-bold text-lg leading-none flex-shrink-0"
-                        >
-                          ×
-                        </button>
-                      </div>
-                    ))
+                    schedule[day].map((subject: Subject, idx: number) => {
+                      let baseName = subject.name;
+                      let labSuffix = null;
+
+                      // Check if it's a lab and if the name explicitly contains '(L)'
+                      // We use subject.isLab as the primary indicator, and then check the string
+                      if (subject.isLab && subject.name.endsWith(' (Lab)')) {
+                        // Extract base name by removing ' (L)'
+                        baseName = subject.name.substring(0, subject.name.length - ' (Lab)'.length);
+                        labSuffix = <span className="ml-1 text-blue-400">(Lab)</span>;
+                      }
+
+                      return (
+                        <div key={idx} className="flex items-center justify-between bg-neutral-700 p-2 rounded text-sm">
+                          {/* Display base name and then the colored (L) suffix */}
+                          <span className="text-white truncate mr-2">
+                            {baseName}
+                            {labSuffix}
+                          </span>
+                          <button
+                            onClick={() => handleRemoveSubject(day, subject.name)}
+                            className="text-red-227 hover:text-red-300 font-bold text-lg leading-none flex-shrink-0"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      );
+                    })
                   ) : (
                     <p className="text-neutral-400 text-sm text-center py-4">No subjects added</p>
                   )}
@@ -198,4 +217,3 @@ const StatCard: React.FC<StatProps> = ({ label, value, color }) => (
 );
 
 export default ManageSubjects;
-

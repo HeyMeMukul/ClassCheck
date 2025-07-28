@@ -3,6 +3,7 @@ import { format, getDay } from 'date-fns';
 import { useCalendar } from '../contexts/CalendarContext';
 import { useSchedule, Subject } from '../contexts/ScheduleContext';
 import { useAttendance } from '../contexts/AttendanceContext';
+import { basename } from 'path';
 
 const ClassSchedule: React.FC = () => {
   const { selectedDate } = useCalendar();
@@ -86,7 +87,16 @@ const ClassSchedule: React.FC = () => {
         <div className="space-y-3 sm:space-y-4">
           {todaysSubjects.map((subject, index) => {
             const status = getSubjectAttendanceStatus(subject);
+            let baseName = subject.name;
+                      let labSuffix = null;
 
+                      // Check if it's a lab and if the name explicitly contains '(L)'
+                      // We use subject.isLab as the primary indicator, and then check the string
+                      if (subject.isLab && subject.name.endsWith(' (Lab)')) {
+                        // Extract base name by removing ' (L)'
+                        baseName = subject.name.substring(0, subject.name.length - ' (Lab)'.length);
+                        labSuffix = <span className="ml-1 text-blue-400">(Lab)</span>;
+                      }
             return (
               <div
                 key={`${subject.name}-${index}`}
@@ -95,7 +105,7 @@ const ClassSchedule: React.FC = () => {
                 <div className="flex flex-col sm:flex-row justify-between items-start gap-3 mb-3">
                   <div className="flex-1">
                     <h3 className="font-semibold text-white text-sm sm:text-base">
-                      {subject.name} {subject.isLab && <span className="ml-1 text-blue-400">(Lab)</span>}
+                      {baseName} {labSuffix}
                     </h3>
                     <p className="text-xs sm:text-sm text-gray-400">
                       {dayName} • Class {index + 1}

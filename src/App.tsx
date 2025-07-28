@@ -81,13 +81,14 @@ const router = createBrowserRouter([
 function App() {
   return (
     <AuthProvider>
-      <ScheduleProvider>
-        <CalendarProvider>
-          <AttendanceProvider>
+      {/* AttendanceProvider now wraps ScheduleProvider */}
+      <AttendanceProvider>
+        <ScheduleProvider>
+          <CalendarProvider>
             <RouterProvider router={router} />
-          </AttendanceProvider>
-        </CalendarProvider>
-      </ScheduleProvider>
+          </CalendarProvider>
+        </ScheduleProvider>
+      </AttendanceProvider>
     </AuthProvider>
   );
 }
