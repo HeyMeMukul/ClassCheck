@@ -14,10 +14,7 @@ export interface WeeklySchedule {
   Wednesday: Subject[];
   Thursday: Subject[];
   Friday: Subject[];
-  // You might want to include Saturday and Sunday here even if they are empty
-  // to avoid type issues if iterating over all days, or handle their absence.
-  // Based on your previous component, they were considered 'Always Free'
-  // and not part of the editable schedule, so we'll stick to M-F for schedule updates.
+
 }
 
 interface ScheduleContextType {
